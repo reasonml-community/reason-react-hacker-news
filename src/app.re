@@ -10,9 +10,10 @@ module App = {
     <div className="App">
       <div className="App-header">
         <div
-          onClick=(updater handleClick)
+          onClick=(updater handleClic)
           style=(
-            ReactDOMRe.Style.make width::"250px" backgroundColor::"#db4d3f" cursor::"pointer" ()
+            ReactDOMRe.Style.make
+              display::"flex" width::"200px" backgroundColor::"#db4d3f" cursor::"pointer" ()
           )>
           <svg className="App-logo" viewBox="0 0 841.9 595.3" alt="logo">
             <g fill="#fff">
