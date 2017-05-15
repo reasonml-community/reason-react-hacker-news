@@ -1,0 +1,8 @@
+.merlin
+/node_modules/
+/dist/
+/lib/*
+!/lib/js/*
+/build/
+*.log
+.DS_Store
