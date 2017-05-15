@@ -12,9 +12,8 @@ module App = {
         <div
           onClick=(updater handleClick)
           style=(
-                  ReactDOMRe.Style.make
-                    width::"250px" backgroundColor::"#db4d3f" cursor::"pointer" ()
-                )>
+            ReactDOMRe.Style.make width::"250px" backgroundColor::"#db4d3f" cursor::"pointer" ()
+          )>
           <svg className="App-logo" viewBox="0 0 841.9 595.3" alt="logo">
             <g fill="#fff">
               <path
