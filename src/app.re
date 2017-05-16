@@ -10,7 +10,7 @@ module App = {
     <div className="App">
       <div className="App-header">
         <div
-          onClick=(updater handleClic)
+          onClick=(updater handleClick)
           style=(
             ReactDOMRe.Style.make
               display::"flex" width::"200px" backgroundColor::"#db4d3f" cursor::"pointer" ()
