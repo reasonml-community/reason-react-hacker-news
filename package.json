@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm run bsb-watch | npm run dev",
+    "start": "npm run dev | npm run bsb-watch",
     "dev": "webpack-dev-server",
     "bsb-watch": "bsb -make-world -w",
     "build": "bsb -make-world && webpack",
