@@ -1,0 +1,72 @@
+.StoryListItem_link {
+  color: black;
+  text-decoration: none;
+}
+
+.StoryListItem_flexRow {
+  flex: 1;
+}
+
+.StoryListItem_icon {
+  width: 32px;
+  height: 32px;
+}
+
+.StoryListItem_storyCell {
+  flex: 1;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  align-items: stretch;
+  padding: 8px;
+}
+
+.StoryListItem_storyTitle {
+  font-size: 18px;
+  margin-bottom: 2px;
+  overflow: hidden;
+}
+
+.StoryListItem_storyTitleText {
+  font-weight: 700;
+}
+
+.StoryListItem_storyTime {
+  color: #999999;
+  font-size: 12px;
+}
+
+.StoryListItem_row {
+  align-items: center;
+  flex-direction: row;
+}
+
+.StoryListItem_itemRow {
+  align-items: stretch;
+  border-bottom: solid 1px #eee;
+  display: flex;
+  margin-bottom: 2px;
+  margin-top: 2px;
+}
+
+.StoryListItem_byline {
+  padding: 0;
+}
+
+.StoryListItem_commentsCell {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  padding: 8;
+  text-align: center;
+  width: 80px;
+}
+
+.StoryListItem_number {
+  font-weight: 700;
+}
+
+.StoryListItem_commentsText {
+  font-size: 10px;
+  text-align: center;
+}

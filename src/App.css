@@ -1,0 +1,31 @@
+body {
+  font-family: 'Helvetica Neue', 'Open Sans', sans-serif;
+  background-color: #f6f4f4;
+}
+
+code {
+  font-family: Courier New;
+  color: #8f8f8f;
+}
+
+.App {
+  max-width: 800px;
+  margin: auto;
+}
+
+
+.App_header {
+  background: #db4d3f;
+  color: #fff;
+  font-weight: bold;
+  padding: 10px;
+}
+
+.App_header a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.App_header h1 {
+  font-size: 24px;
+}

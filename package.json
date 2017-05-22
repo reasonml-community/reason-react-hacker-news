@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm run dev | npm run bsb-watch",
+    "start": "yarn run dev | yarn run bsb-watch",
     "dev": "webpack-dev-server",
     "bsb-watch": "bsb -make-world -w",
     "build": "bsb -make-world && webpack",
@@ -17,13 +17,21 @@
   "license": "MIT",
   "dependencies": {
     "bs-director": "^0.0.1",
+    "bs-fetch": "buckletypes/bs-fetch",
+    "bs-json": "buckletypes/bs-json",
+    "moment": "^2.18.1",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "reason-react": "https://github.com/reasonml/reason-react.git"
   },
   "devDependencies": {
     "bs-platform": "^1.7.3",
+    "css-loader": "^0.28.1",
+    "extract-text-webpack-plugin": "^2.1.0",
+    "file-loader": "^0.11.1",
+    "style-loader": "^0.17.0",
     "webpack": "^2.5.1",
-    "webpack-dev-server": "2"
+    "webpack-dev-server": "2",
+    "webpack-shell-plugin": "^0.5.0"
   }
 }
