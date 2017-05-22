@@ -4,8 +4,6 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const prod = process.env.NODE_ENV == 'production';
 
-console.log({prod});
-
 module.exports = {
   entry: './lib/js/src/index',
   output: {
@@ -20,6 +18,7 @@ module.exports = {
     alias: {
       src: path.resolve(__dirname, 'src/'),
       director: 'director/build/director',
+      moment: 'moment/min/moment.min.js',
     },
   },
   module: {
