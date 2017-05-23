@@ -32,6 +32,7 @@
 }
 
 .CommentList_disclosureRow {
+  cursor: pointer;
   padding-left: 0px;
   padding-top: 4px;
   padding-bottom: 4px;

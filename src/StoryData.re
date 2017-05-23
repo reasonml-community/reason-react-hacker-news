@@ -29,7 +29,7 @@ type comment =
   | CommentPresent comment_present
   | CommentDeleted comment_deleted;
 
-type comments_map = ReadOnlyJSMap.map int comment;
+type comments_map = JSMap.map int comment;
 
 type story_with_comments = {
   by: string,
@@ -79,7 +79,7 @@ let parseCommentsArray json :comments_map => {
   let commentsArray = Json.Decode.(json |> array parseComment);
   let commentsArrayOfPairs =
     Array.map (fun (comment: comment) => (getCommentId comment, comment)) commentsArray;
-  ReadOnlyJSMap.create commentsArrayOfPairs
+  JSMap.create commentsArrayOfPairs
 };
 
 let parseStoryWithComments json :story_with_comments =>

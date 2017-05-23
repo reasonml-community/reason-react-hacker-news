@@ -12,6 +12,9 @@ module.exports = {
   fromNow: function(time) {
     return moment(time * 1000).fromNow();
   },
+  getAttribute: function(node, attr) {
+    return node.getAttribute(attr);
+  },
   dangerousHtml: function(html) {
     return {
       __html: html,
