@@ -7,8 +7,7 @@ external requireAssetURI : string => string = "require" [@@bs.val];
 /* format a timestamp in seconds as relative humanised time sentence */
 external fromNow : int => string = "fromNow" [@@bs.module "src/UtilsJS"];
 
-external internal_getAttribute : Js.t 'a => string => Js.null string =
-  "getAttribute" [@@bs.module "src/UtilsJS"];
+external internal_getAttribute : Js.t 'a => string => Js.null string = "getAttribute" [@@bs.send];
 
 let getAttribute node name => Js.Null.to_opt (internal_getAttribute node name);
 

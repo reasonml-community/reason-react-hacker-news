@@ -36,21 +36,21 @@ module CommentList = {
     | Some text => <div dangerouslySetInnerHTML=(dangerousHtml text) />
     | None => textEl "missing comment"
     };
-  let rec renderCommentKids componentBag story (comment: StoryData.comment_present) =>
-    renderCommentList componentBag story comment.kids
-  and renderComment componentBag (id: int) (story: StoryData.story_with_comments) => {
-    let commentMaybe = JSMap.get story.comments id;
+  let rec renderCommentKids this (comment: StoryData.comment_present) =>
+    renderCommentList this comment.kids
+  and renderComment this (id: int) => {
+    let commentMaybe = JSMap.get this.props.story.comments id;
     let commentContent =
       switch commentMaybe {
       | Some commentPresentOrDeleted =>
         switch commentPresentOrDeleted {
         | StoryData.CommentPresent comment =>
-          let openComment = not (IntSet.mem comment.id componentBag.state.collapsed_comments);
+          let openComment = not (IntSet.mem comment.id this.state.collapsed_comments);
           let commentBody =
             if openComment {
               <div className="CommentList_commentBody">
                 (renderCommentText comment.text)
-                (renderCommentKids componentBag story comment)
+                (renderCommentKids this comment)
               </div>
             } else {
               <noscript />
@@ -59,7 +59,7 @@ module CommentList = {
             <div
               className="CommentList_disclosureRow CommentList_inline"
               name=(string_of_int comment.id)
-              onClick=(componentBag.updater handleToggle)>
+              onClick=(this.updater handleToggle)>
               <img
                 alt=(openComment ? "hide" : "show")
                 src=(
@@ -81,15 +81,14 @@ module CommentList = {
       };
     <div key=(string_of_int id)> commentContent </div>
   }
-  and renderCommentList componentBag story commentIds =>
+  and renderCommentList this (commentIds: option (array int)) =>
     switch commentIds {
     | Some ids =>
-      let commentList = Array.map (fun id => renderComment componentBag id story) ids;
+      let commentList = Array.map (fun id => renderComment this id) ids;
       <div> (ReactRe.arrayToElement commentList) </div>
     | None => <div />
     };
-  let render componentBag =>
-    renderCommentList componentBag componentBag.props.story componentBag.props.story.kids;
+  let render this => renderCommentList this this.props.story.kids;
 };
 
 include ReactRe.CreateComponent CommentList;
