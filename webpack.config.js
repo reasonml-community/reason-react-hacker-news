@@ -18,7 +18,6 @@ module.exports = {
     alias: {
       src: path.resolve(__dirname, 'src/'),
       director: 'director/build/director',
-      moment: 'moment/min/moment.min.js',
     },
   },
   module: {

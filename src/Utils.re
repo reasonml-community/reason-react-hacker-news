@@ -4,8 +4,19 @@ external requireCSS : string => unit = "require" [@@bs.val];
 /* require an asset (eg. an image) and return exported string value (image URI) */
 external requireAssetURI : string => string = "require" [@@bs.val];
 
+external currentTime : unit => int = "Date.now" [@@bs.val];
+
 /* format a timestamp in seconds as relative humanised time sentence */
-external fromNow : int => string = "fromNow" [@@bs.module "src/UtilsJS"];
+let fromNow unixtime => {
+  let delta = currentTime () / 1000 - unixtime;
+  if (delta < 3600) {
+    string_of_int (delta / 60) ^ " minutes ago"
+  } else if (delta < 86400) {
+    string_of_int (delta / 3600) ^ " hours ago"
+  } else {
+    string_of_int (delta / 86400) ^ " days ago"
+  }
+};
 
 external internal_getAttribute : Js.t 'a => string => Js.null string = "getAttribute" [@@bs.send];
 

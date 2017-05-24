@@ -9,9 +9,6 @@ var storyUrl = function(id) {
 };
 
 module.exports = {
-  fromNow: function(time) {
-    return moment(time * 1000).fromNow();
-  },
   dangerousHtml: function(html) {
     return {
       __html: html,
