@@ -2,26 +2,20 @@ open Utils;
 
 requireCSS "src/CommentList.css";
 
-module IntSet =
-  Set.Make {
-    let compare = Pervasives.compare;
-    type t = int;
-  };
-
 module CommentList = {
   include ReactRe.Component.Stateful;
   type props = {story: StoryData.story_with_comments};
-  type state = {collapsed_comments: IntSet.t};
+  type state = {collapsed_comments: JSSet.set int};
   let name = "CommentList";
-  let getInitialState _ => {collapsed_comments: IntSet.empty};
+  let getInitialState _ => {collapsed_comments: JSSet.create ([||]: array int)};
   let toggleComment collapsed (idMaybe: option string) =>
     switch idMaybe {
     | Some idString =>
       let id = int_of_string idString;
-      if (IntSet.mem id collapsed) {
-        IntSet.remove id collapsed
+      if (JSSet.has collapsed id) {
+        JSSet.remove collapsed id
       } else {
-        IntSet.add id collapsed
+        JSSet.add collapsed id
       }
     | None => collapsed
     };
@@ -45,7 +39,7 @@ module CommentList = {
       | Some commentPresentOrDeleted =>
         switch commentPresentOrDeleted {
         | StoryData.CommentPresent comment =>
-          let openComment = not (IntSet.mem comment.id this.state.collapsed_comments);
+          let openComment = not (JSSet.has this.state.collapsed_comments comment.id);
           let commentBody =
             if openComment {
               <div className="CommentList_commentBody">
