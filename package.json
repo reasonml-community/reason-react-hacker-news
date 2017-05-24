@@ -10,7 +10,7 @@
     "dev": "webpack-dev-server",
     "bsb-watch": "bsb -make-world -w",
     "build": "bsb -make-world && webpack",
-    "analyze": "bsb -make-world; webpack --json | webpack-bundle-size-analyzer",
+    "analyze": "bsb -make-world; webpack; analyze-bundle -b dist/build/main.js -s dist/build/stats.json",
     "clean": "bsb -clean-world"
   },
   "keywords": [],
@@ -27,13 +27,19 @@
   },
   "devDependencies": {
     "bs-platform": "^1.7.3",
+    "compression-webpack-plugin": "^0.4.0",
     "css-loader": "^0.28.1",
+    "electrode-bundle-analyzer": "^1.0.0",
     "extract-text-webpack-plugin": "^2.1.0",
     "file-loader": "^0.11.1",
     "style-loader": "^0.17.0",
+    "sw-precache-webpack-plugin": "^0.9.2",
     "webpack": "^2.5.1",
     "webpack-bundle-size-analyzer": "^2.6.0",
+    "webpack-closure-compiler": "^2.1.4",
     "webpack-dev-server": "2",
-    "webpack-shell-plugin": "^0.5.0"
+    "webpack-manifest-plugin": "^1.1.0",
+    "webpack-shell-plugin": "^0.5.0",
+    "webpack-stats-plugin": "^0.1.5"
   }
 }

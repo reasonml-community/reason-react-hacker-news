@@ -24,6 +24,9 @@ let getAttribute node name => Js.Null.to_opt (internal_getAttribute node name);
 
 external dangerousHtml : string => Js.t 'a = "dangerousHtml" [@@bs.module "src/UtilsJS"];
 
+external registerServiceWorker : unit => unit =
+  "registerServiceWorker" [@@bs.module "src/UtilsJS"];
+
 let intEl n => ReactRe.stringToElement (string_of_int n);
 
 let textEl str => ReactRe.stringToElement str;

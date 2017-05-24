@@ -1,3 +1,7 @@
+open Utils;
+
+registerServiceWorker ();
+
 let renderForRoute route => ReactDOMRe.renderToElementWithId <App route /> "root";
 
 let router =
