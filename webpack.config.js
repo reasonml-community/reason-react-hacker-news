@@ -79,7 +79,7 @@ module.exports = {
       filename: 'service-worker.js',
       minify: prod || analyze,
       navigateFallback: publicUrl + '/index.html',
-      // staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/],
+      staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/],
     }),
 
 
