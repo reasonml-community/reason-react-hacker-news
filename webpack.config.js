@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const ClosureCompilerPlugin = require('webpack-closure-compiler');
 const StatsWriterPlugin = require('webpack-stats-plugin').StatsWriterPlugin;
@@ -22,12 +21,7 @@ const statsOptions = {
 const prod = process.env.NODE_ENV == 'production';
 const analyze = process.env.NODE_ENV == 'analyze';
 
-let publicUrl;
-if (prod) {
-  publicUrl = 'https://hackernewsmobile.com';
-} else {
-  publicUrl = '';
-}
+let publicUrl = '';
 
 module.exports = {
   context: __dirname,
@@ -54,9 +48,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        loader: ExtractTextPlugin.extract({
-          use: 'css-loader',
-        }),
+        use: [{loader: 'style-loader'}, {loader: 'css-loader'}],
       },
     ],
   },
@@ -66,8 +58,6 @@ module.exports = {
     tls: 'empty',
   },
   plugins: [
-    new ExtractTextPlugin('[name].css'),
-
     // Generate a service worker script that will precache, and keep up to date,
     // the HTML & assets that are part of the Webpack build.
     new SWPrecacheWebpackPlugin({
@@ -82,19 +72,18 @@ module.exports = {
       staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/],
     }),
 
-
     // Generate a manifest file which contains a mapping of all asset filenames
     // to their corresponding output file so that tools can pick it up without
     // having to parse `index.html`.
     new ManifestPlugin({
       fileName: 'asset-manifest.json',
     }),
-     new webpack.DefinePlugin({
-          'process.env': {
-            NODE_ENV: JSON.stringify(prod || analyze ? 'production' : null),
-            PUBLIC_URL: JSON.stringify(publicUrl + '/build'),
-          },
-        }),
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify(prod || analyze ? 'production' : null),
+        PUBLIC_URL: JSON.stringify(publicUrl + '/build'),
+      },
+    }),
     prod || analyze
       ? new ClosureCompilerPlugin({
           compiler: {
@@ -114,7 +103,7 @@ module.exports = {
           comments: /^\**!|^ [0-9]+ $|@preserve|@license/,
         })
       : null,
-    analyze
+    analyze || true
       ? new CompressionPlugin({
           asset: '[path].gz[query]',
           algorithm: 'gzip',
