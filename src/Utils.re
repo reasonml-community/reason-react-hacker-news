@@ -24,9 +24,17 @@ let getAttribute node name => Js.Null.to_opt (internal_getAttribute node name);
 
 external dangerousHtml : string => Js.t 'a = "dangerousHtml" [@@bs.module "src/UtilsJS"];
 
+external distanceFromBottom : unit => int = "distanceFromBottom" [@@bs.module "src/UtilsJS"];
+
 external registerServiceWorker : unit => unit =
   "registerServiceWorker" [@@bs.module "src/UtilsJS"];
 
 let intEl n => ReactRe.stringToElement (string_of_int n);
 
 let textEl str => ReactRe.stringToElement str;
+
+let unwrapUnsafely a =>
+  switch a {
+  | Some v => v
+  | None => raise (Invalid_argument "Passed None to unwrapUnsafely")
+  };

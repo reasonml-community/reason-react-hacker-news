@@ -11,7 +11,8 @@
     "reason-react",
     "bs-fetch",
     "bs-json",
-    "bs-director"
+    "bs-director",
+    "bs-webapi"
   ],
   "sources": [
     {

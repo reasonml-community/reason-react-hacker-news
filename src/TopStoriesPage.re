@@ -1,23 +1,34 @@
+open ReasonJs;
+
+open Utils;
+
 module TopStoriesPage = {
   include ReactRe.Component.Stateful;
   type props = unit;
-  type state = {topstories: StoryData.topstories, page: int};
+  type state = {topstories: StoryData.topstories, page: int, loading: bool};
   let name = "TopStoriesPage";
+  let getInitialState _ => {topstories: [||], page: 0, loading: false};
+  let nearTheBottom unit => distanceFromBottom () < 100;
   let handleLoaded {state} (page, data) => {
     let updatedTopstories = Array.concat [state.topstories, data];
-    Some {topstories: updatedTopstories, page: page + 1}
+    Some {topstories: updatedTopstories, page: page + 1, loading: false}
   };
-  let getInitialState _ => {topstories: [||], page: 0};
-  let componentDidMount {updater, state} => {
-    StoryData.fetchTopStories state.page (updater handleLoaded);
-    None
-  };
-  let componentDidUpdate prevProps::props prevState::state {updater, state} => {
-    if (state.page < 4) {
-      StoryData.fetchTopStories state.page (updater handleLoaded);
-      ()
+  let loadNextPage this =>
+    if (this.state.page < 4) {
+      StoryData.fetchTopStories this.state.page (this.updater handleLoaded);
+      Some {...this.state, loading: true}
+    } else {
+      None
     };
-    None
+  let handleScroll this _ =>
+    if (nearTheBottom () && not this.state.loading) {
+      loadNextPage this
+    } else {
+      None
+    };
+  let componentDidMount this => {
+    Dom.(Window.addEventListener "scroll" (this.updater handleScroll) window);
+    loadNextPage this
   };
   let render {state} => {
     let storyArray =
