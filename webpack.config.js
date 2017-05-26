@@ -5,27 +5,19 @@ const ClosureCompilerPlugin = require('webpack-closure-compiler');
 const StatsWriterPlugin = require('webpack-stats-plugin').StatsWriterPlugin;
 const ManifestPlugin = require('webpack-manifest-plugin');
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
-
-const statsOptions = {
-  filename: 'stats.json',
-  fields: null,
-  transform: function(data) {
-    data.modules.forEach(function(m) {
-      delete m.source;
-    });
-    delete data.children;
-    return JSON.stringify(data, null, 2);
-  },
-};
+const rollupPluginNodeResolve = require('rollup-plugin-node-resolve');
 
 const prod = process.env.NODE_ENV == 'production';
+const dev = !prod && process.env.DEV !== '0';
 const analyze = process.env.NODE_ENV == 'analyze';
+const useRollup = process.env.ROLLUP !== '0';
+const useClosureCompiler = process.env.CLOSURE === '1';
 
 let publicUrl = '';
 
 module.exports = {
   context: __dirname,
-  entry: './lib/js/src/index',
+  entry: useRollup ? './lib/es6/src/index' : './lib/js/src/index',
   output: {
     filename: '[name].js',
     path: path.join(__dirname, './dist/build'),
@@ -50,7 +42,15 @@ module.exports = {
         test: /\.css$/,
         use: [{loader: 'style-loader'}, {loader: 'css-loader'}],
       },
-    ],
+      useRollup
+        ? {
+            test: /\.js$/,
+            loader: 'rollup-loader',
+            options: {
+              plugins: [rollupPluginNodeResolve({module: true, jsnext: true},
+          }
+        : null,
+    ].filter(Boolean),
   },
   node: {
     fs: 'empty',
@@ -80,16 +80,15 @@ module.exports = {
     }),
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify(prod || analyze ? 'production' : null),
+        NODE_ENV: JSON.stringify(!dev ? 'production' : null),
         PUBLIC_URL: JSON.stringify(publicUrl + '/build'),
       },
     }),
-    prod || analyze
+    useClosureCompiler
       ? new ClosureCompilerPlugin({
           compiler: {
             language_in: 'ECMASCRIPT6',
             language_out: 'ECMASCRIPT5',
-            // compilation_level: 'ADVANCED',
           },
           concurrency: 3,
         })
@@ -103,7 +102,7 @@ module.exports = {
           comments: /^\**!|^ [0-9]+ $|@preserve|@license/,
         })
       : null,
-    analyze || true
+    true
       ? new CompressionPlugin({
           asset: '[path].gz[query]',
           algorithm: 'gzip',
@@ -112,6 +111,18 @@ module.exports = {
           minRatio: 0.8,
         })
       : null,
-    analyze ? new StatsWriterPlugin(statsOptions) : null,
+    true
+      ? new StatsWriterPlugin({
+          filename: 'stats.json',
+          fields: null,
+          transform: function(data) {
+            data.modules.forEach(function(m) {
+              delete m.source;
+            });
+            delete data.children;
+            return JSON.stringify(data, null, 2);
+          },
+        })
+      : null,
   ].filter(Boolean),
 };

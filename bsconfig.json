@@ -3,10 +3,11 @@
   comma. If this screws with your editor highlighting, please tell us by filing
   an issue! */
 {
-  "name": "create-reason-react-app",
+  "name": "reason-react-hacker-news",
   "reason": {
     "react-jsx": true
   },
+  "package-specs": ["commonjs", "es6"],
   "bs-dependencies": [
     "reason-react",
     "bs-fetch",
