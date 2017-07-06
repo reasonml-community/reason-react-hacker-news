@@ -4,11 +4,12 @@ requireCSS "src/StoryListItem.css";
 
 let commentIcon = requireAssetURI "src/comment.png";
 
-module StoryListItem = {
-  include ReactRe.Component;
-  let name = "StoryListItem";
-  type props = {story: StoryData.story, index: int};
-  let renderTitle (story: StoryData.story, index: int) => {
+let name = "StoryListItem";
+
+let component = ReasonReact.statelessComponent name;
+
+let make story::(story:StoryData.story) index::(index: int) _children => {
+  let renderTitle () => {
     let content =
       <div className="StoryListItem_storyTitle">
         (intEl (index + 1))
@@ -25,26 +26,28 @@ module StoryListItem = {
       };
     <div> link </div>
   };
-  let renderByline (story: StoryData.story) =>
-    <div className="StoryListItem_row StoryListItem_byline">
-      /* TODO: badge */
 
-        <span className="StoryListItem_number"> (intEl story.score) </span>
-        (textEl " points")
-        <span>
-          <span className="StoryListItem_storyTime">
-            (textEl (" submitted " ^ fromNow story.time ^ " by " ^ story.by))
-          </span>
+ let renderByline () =>
+  <div className="StoryListItem_row StoryListItem_byline">
+    /* TODO: badge */
+      <span className="StoryListItem_number"> (intEl story.score) </span>
+      (textEl " points")
+      <span>
+        <span className="StoryListItem_storyTime">
+          (textEl (" submitted " ^ fromNow story.time ^ " by " ^ story.by))
         </span>
-      </div>;
-  let renderArticleButton (story: StoryData.story, index: int) =>
+      </span>
+    </div>;
+
+  let renderArticleButton () =>
     <div className="StoryListItem_flexRow">
       <div className="StoryListItem_storyCell">
-        (renderTitle (story, index))
-        (renderByline story)
+        (renderTitle ())
+        (renderByline ())
       </div>
     </div>;
-  let renderCommentsButton (story: StoryData.story) =>
+
+  let renderCommentsButton () =>
     <div className="StoryListItem_commentsCell">
       <a href=("#/comments/" ^ string_of_int story.id) className="StoryListItem_link">
         <div> <img alt="comments" className="StoryListItem_icon" src=commentIcon /> </div>
@@ -56,13 +59,14 @@ module StoryListItem = {
         </div>
       </a>
     </div>;
-  let render {props} =>
-    <div className="StoryListItem_itemRow">
-      (renderArticleButton (props.story, props.index))
-      (renderCommentsButton props.story)
-    </div>;
+
+    {
+      ...component,
+      render: fun _self => {
+        <div className="StoryListItem_itemRow">
+          (renderArticleButton ())
+          (renderCommentsButton ())
+        </div>
+      },
+    };
 };
-
-include ReactRe.CreateComponent StoryListItem;
-
-let createElement ::story ::index => wrapProps {story, index};

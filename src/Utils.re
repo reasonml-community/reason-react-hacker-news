@@ -29,12 +29,6 @@ external distanceFromBottom : unit => int = "distanceFromBottom" [@@bs.module "s
 external registerServiceWorker : unit => unit =
   "registerServiceWorker" [@@bs.module "src/UtilsJS"];
 
-let intEl n => ReactRe.stringToElement (string_of_int n);
+let intEl n => ReasonReact.stringToElement (string_of_int n);
 
-let textEl str => ReactRe.stringToElement str;
-
-let unwrapUnsafely a =>
-  switch a {
-  | Some v => v
-  | None => raise (Invalid_argument "Passed None to unwrapUnsafely")
-  };
+let textEl str => ReasonReact.stringToElement str;

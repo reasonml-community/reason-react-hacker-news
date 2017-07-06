@@ -1,19 +1,13 @@
-open Utils;
+let component = ReasonReact.statelessComponent "App";
 
-module App = {
-  include ReactRe.Component;
-  type props = {route: Routing.route};
-  let name = "App";
-  let render {props} => {
+let make ::route _children => {
+  ...component,
+  render: fun _self => {
     let page =
-      switch props.route {
+      switch route {
       | Routing.Home => <TopStoriesPage />
       | Routing.Comments id => <CommentsPage id />
       };
     <div> page </div>
-  };
+  }
 };
-
-include ReactRe.CreateComponent App;
-
-let createElement ::route => wrapProps {route: route};

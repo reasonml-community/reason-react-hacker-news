@@ -10,7 +10,7 @@ const rollupPluginNodeResolve = require('rollup-plugin-node-resolve');
 const prod = process.env.NODE_ENV == 'production';
 const dev = !prod && process.env.DEV !== '0';
 const analyze = process.env.NODE_ENV == 'analyze';
-const useRollup = process.env.ROLLUP !== '0';
+const useRollup = process.env.ROLLUP == '1';
 const useClosureCompiler = process.env.CLOSURE === '1';
 
 let publicUrl = '';
@@ -47,7 +47,8 @@ module.exports = {
             test: /\.js$/,
             loader: 'rollup-loader',
             options: {
-              plugins: [rollupPluginNodeResolve({module: true, jsnext: true},
+              plugins: [rollupPluginNodeResolve({module: true})]
+            },
           }
         : null,
     ].filter(Boolean),

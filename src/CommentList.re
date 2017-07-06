@@ -2,12 +2,11 @@ open Utils;
 
 requireCSS "src/CommentList.css";
 
-module CommentList = {
-  include ReactRe.Component.Stateful;
-  type props = {story: StoryData.story_with_comments};
-  type state = {collapsed_comments: JSSet.set int};
-  let name = "CommentList";
-  let getInitialState _ => {collapsed_comments: JSSet.create ([||]: array int)};
+type state = {collapsed_comments: JSSet.set int};
+let name = "CommentList";
+let component = ReasonReact.statefulComponent name;
+
+let make story::(story: StoryData.story_with_comments) _children => {
   let toggleComment collapsed (idMaybe: option string) =>
     switch idMaybe {
     | Some idString =>
@@ -21,8 +20,8 @@ module CommentList = {
     };
   let getCommentIdFromEvent (event: ReactEventRe.Mouse.t) =>
     getAttribute (ReactDOMRe.domElementToObj (ReactEventRe.Mouse.currentTarget event)) "name";
-  let handleToggle {state} event =>
-    Some {
+  let handleToggle event {ReasonReact.state} =>
+    ReasonReact.Update {
       collapsed_comments: toggleComment state.collapsed_comments (getCommentIdFromEvent event)
     };
   let renderCommentText (textMaybe: option string) =>
@@ -30,21 +29,22 @@ module CommentList = {
     | Some text => <div dangerouslySetInnerHTML=(dangerousHtml text) />
     | None => textEl "missing comment"
     };
-  let rec renderCommentKids this (comment: StoryData.comment_present) =>
-    renderCommentList this comment.kids
-  and renderComment this (id: int) => {
-    let commentMaybe = JSMap.get this.props.story.comments id;
+  let rec renderCommentKids self (comment: StoryData.comment_present) =>
+    renderCommentList self comment.kids
+  and renderComment self (id: int) => {
+    let {ReasonReact.state} = self;
+    let commentMaybe = JSMap.get story.comments id;
     let commentContent =
       switch commentMaybe {
       | Some commentPresentOrDeleted =>
         switch commentPresentOrDeleted {
         | StoryData.CommentPresent comment =>
-          let openComment = not (JSSet.has this.state.collapsed_comments comment.id);
+          let openComment = not (JSSet.has state.collapsed_comments comment.id);
           let commentBody =
             if openComment {
               <div className="CommentList_commentBody">
                 (renderCommentText comment.text)
-                (renderCommentKids this comment)
+                (renderCommentKids self comment)
               </div>
             } else {
               <noscript />
@@ -53,14 +53,13 @@ module CommentList = {
             <div
               className="CommentList_disclosureRow CommentList_inline"
               name=(string_of_int comment.id)
-              onClick=(this.updater handleToggle)>
+              onClick=(self.update handleToggle)>
               <img
                 alt=(openComment ? "hide" : "show")
                 src=(
-                      openComment ?
-                        requireAssetURI "src/disclosure90.png" :
-                        requireAssetURI "src/disclosure.png"
-                    )
+                  openComment ?
+                    requireAssetURI "src/disclosure90.png" : requireAssetURI "src/disclosure.png"
+                )
                 className="CommentList_disclosure CommentList_muted"
               />
               <span className="CommentList_muted">
@@ -75,16 +74,19 @@ module CommentList = {
       };
     <div key=(string_of_int id)> commentContent </div>
   }
-  and renderCommentList this (commentIds: option (array int)) =>
+  and renderCommentList self (commentIds: option (array int)) =>
     switch commentIds {
     | Some ids =>
-      let commentList = Array.map (fun id => renderComment this id) ids;
-      <div> (ReactRe.arrayToElement commentList) </div>
+      let commentList = Array.map (fun id => renderComment self id) ids;
+      <div> (ReasonReact.arrayToElement commentList) </div>
     | None => <div />
     };
-  let render this => renderCommentList this this.props.story.kids;
+
+  {
+    ...component,
+    initialState: fun () => {collapsed_comments: JSSet.create ([||]: array int)},
+    render: fun self => {
+      renderCommentList self story.kids
+    },
+  };
 };
-
-include ReactRe.CreateComponent CommentList;
-
-let createElement ::story => wrapProps {story: story};

@@ -2,17 +2,14 @@ open Utils;
 
 requireCSS "src/CommentsPage.css";
 
-module CommentsPage = {
-  include ReactRe.Component.Stateful;
-  type props = {id: int};
-  type state = {story_with_comments: option StoryData.story_with_comments};
-  let name = "CommentsPage";
-  let handleLoaded _ data => Some {story_with_comments: Some data};
-  let getInitialState _ => {story_with_comments: None};
-  let componentDidMount {updater, props} => {
-    StoryData.fetchStoryWithComments props.id (updater handleLoaded);
-    None
-  };
+type state = {story_with_comments: option StoryData.story_with_comments};
+let name = "CommentsPage";
+let component = ReasonReact.statefulComponent name;
+
+let make ::id _children => {
+
+  let handleLoaded data _self => ReasonReact.Update {story_with_comments: Some data};
+
   let renderTitle (story: StoryData.story_with_comments) => {
     let title = <h2 className="CommentsPage_title"> (textEl story.title) </h2>;
     let link =
@@ -30,16 +27,20 @@ module CommentsPage = {
         <span> (textEl (" submitted " ^ fromNow story.time ^ " by " ^ story.by)) </span>
       </span>
     </div>;
-  let render {state} => {
-    let commentList =
-      switch state.story_with_comments {
-      | Some story => <div> (renderTitle story) (renderByline story) <CommentList story /> </div>
-      | None => ReactRe.stringToElement "loading"
-      };
-    <div> commentList </div>
-  };
+  {
+    ...component,
+    initialState: fun () => {story_with_comments: None},
+    didMount: fun self => {
+      StoryData.fetchStoryWithComments id (self.update handleLoaded) |> ignore;
+      ReasonReact.NoUpdate;
+    },
+    render: fun {state} => {
+      let commentList =
+        switch state.story_with_comments {
+        | Some story => <div> (renderTitle story) (renderByline story) <CommentList story /> </div>
+        | None => ReasonReact.stringToElement "loading"
+        };
+      <div> commentList </div>
+    }
+  }
 };
-
-include ReactRe.CreateComponent CommentsPage;
-
-let createElement ::id => wrapProps {id: id};

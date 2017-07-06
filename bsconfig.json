@@ -5,7 +5,7 @@
 {
   "name": "reason-react-hacker-news",
   "reason": {
-    "react-jsx": true
+    "react-jsx": 2
   },
   "package-specs": ["commonjs", "es6"],
   "bs-dependencies": [

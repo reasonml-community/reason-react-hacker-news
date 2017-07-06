@@ -18,6 +18,10 @@
   }
 
   .App_header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
     background: #db4d3f;
     color: #fff;
     font-weight: bold;
@@ -26,6 +30,8 @@
   }
 
   .App_header a {
+    display: block;
+    flex: 0 0 auto;
     color: #fff;
     text-decoration: none;
   }
@@ -40,6 +46,7 @@
 <div class="App">
   <div class="App_header">
     <a href="#/"> <h1>Reason React Hacker News</h1> </a>
+    <a href="https://github.com/jsdf/reason-react-hacker-news"> Github </a>
   </div>
   <div id="root"></div>
   <noscript>Please enable Javascript to use this app.</noscript>
