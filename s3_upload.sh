@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -eo pipefail
 
 s3_upload() {
   local filepath=$1
@@ -33,6 +33,13 @@ s3_sync() {
     fi
   fi
 }
+
+
+
+for filepath in public/*
+do
+  cp "$filepath" dist
+done
 
 cd dist
 
