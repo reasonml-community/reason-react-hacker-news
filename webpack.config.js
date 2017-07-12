@@ -4,13 +4,15 @@ const CompressionPlugin = require('compression-webpack-plugin');
 const ClosureCompilerPlugin = require('webpack-closure-compiler');
 const StatsWriterPlugin = require('webpack-stats-plugin').StatsWriterPlugin;
 const ManifestPlugin = require('webpack-manifest-plugin');
+const ShakePlugin = require('webpack-common-shake').Plugin;
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 const rollupPluginNodeResolve = require('rollup-plugin-node-resolve');
 
 const prod = process.env.NODE_ENV == 'production';
 const dev = !prod && process.env.DEV !== '0';
 const analyze = process.env.NODE_ENV == 'analyze';
-const useRollup = process.env.ROLLUP == '1';
+const useRollup = process.env.ROLLUP !== '0';
+const useShakePlugin = process.env.SHAKE == '1';
 const useClosureCompiler = process.env.CLOSURE === '1';
 
 let publicUrl = '';
@@ -47,7 +49,7 @@ module.exports = {
             test: /\.js$/,
             loader: 'rollup-loader',
             options: {
-              plugins: [rollupPluginNodeResolve({module: true})]
+              plugins: [rollupPluginNodeResolve({module: true})],
             },
           }
         : null,
@@ -125,5 +127,6 @@ module.exports = {
           },
         })
       : null,
+    useShakePlugin ? new ShakePlugin() : null,
   ].filter(Boolean),
 };
