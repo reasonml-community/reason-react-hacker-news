@@ -27,10 +27,10 @@
     "moment": "^2.18.1",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
-    "reason-react": "^0.2.1"
+    "reason-react": "^0.2.4"
   },
   "devDependencies": {
-    "bs-platform": "1.7.5",
+    "bs-platform": "1.9.1",
     "compression-webpack-plugin": "^0.4.0",
     "css-loader": "^0.28.1",
     "electrode-bundle-analyzer": "^1.0.0",

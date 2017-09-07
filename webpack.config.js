@@ -11,7 +11,7 @@ const rollupPluginNodeResolve = require('rollup-plugin-node-resolve');
 const prod = process.env.NODE_ENV == 'production';
 const dev = !prod && process.env.DEV !== '0';
 const analyze = process.env.NODE_ENV == 'analyze';
-const useRollup = process.env.ROLLUP == '1';
+const useRollup = prod || process.env.ROLLUP == '1';
 const useShakePlugin = process.env.SHAKE == '1';
 const useClosureCompiler = process.env.CLOSURE === '1';
 
