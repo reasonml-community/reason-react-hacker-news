@@ -2,9 +2,14 @@ open Utils;
 
 requireCSS "src/CommentList.css";
 
-type state = {collapsed_comments: JSSet.set int};
 let name = "CommentList";
-let component = ReasonReact.statefulComponent name;
+
+type action =
+  | Toggle (option string);
+
+type state = {collapsed_comments: JSSet.set int};
+
+let component = ReasonReact.reducerComponent name;
 
 let make story::(story: StoryData.story_with_comments) _children => {
   let toggleComment collapsed (idMaybe: option string) =>
@@ -20,10 +25,6 @@ let make story::(story: StoryData.story_with_comments) _children => {
     };
   let getCommentIdFromEvent (event: ReactEventRe.Mouse.t) =>
     getAttribute (ReactDOMRe.domElementToObj (ReactEventRe.Mouse.currentTarget event)) "name";
-  let handleToggle event {ReasonReact.state} =>
-    ReasonReact.Update {
-      collapsed_comments: toggleComment state.collapsed_comments (getCommentIdFromEvent event)
-    };
   let renderCommentText (textMaybe: option string) =>
     switch textMaybe {
     | Some text => <div dangerouslySetInnerHTML=(dangerousHtml text) />
@@ -32,7 +33,7 @@ let make story::(story: StoryData.story_with_comments) _children => {
   let rec renderCommentKids self (comment: StoryData.comment_present) =>
     renderCommentList self comment.kids
   and renderComment self (id: int) => {
-    let {ReasonReact.state} = self;
+    let {ReasonReact.state: state} = self;
     let commentMaybe = JSMap.get story.comments id;
     let commentContent =
       switch commentMaybe {
@@ -53,7 +54,7 @@ let make story::(story: StoryData.story_with_comments) _children => {
             <div
               className="CommentList_disclosureRow CommentList_inline"
               name=(string_of_int comment.id)
-              onClick=(self.update handleToggle)>
+              onClick=(self.reduce (fun event => Toggle (getCommentIdFromEvent event)))>
               <img
                 alt=(openComment ? "hide" : "show")
                 src=(
@@ -81,12 +82,14 @@ let make story::(story: StoryData.story_with_comments) _children => {
       <div> (ReasonReact.arrayToElement commentList) </div>
     | None => <div />
     };
-
   {
     ...component,
     initialState: fun () => {collapsed_comments: JSSet.create ([||]: array int)},
-    render: fun self => {
-      renderCommentList self story.kids
-    },
-  };
+    reducer: fun action state =>
+      switch action {
+      | Toggle commentId =>
+        ReasonReact.Update {collapsed_comments: toggleComment state.collapsed_comments commentId}
+      },
+    render: fun self => renderCommentList self story.kids
+  }
 };

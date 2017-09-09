@@ -8,39 +8,41 @@ type state = {
   loading: bool
 };
 
-let component = ReasonReact.statefulComponent "TopStoriesPage";
+type action =
+  | Loaded (int, StoryData.topstories)
+  | Loading
+  | Scroll;
+
+let component = ReasonReact.reducerComponent "TopStoriesPage";
 
 let make _children => {
   let nearTheBottom () => distanceFromBottom () < 100;
-  let handleLoaded (page, data) {ReasonReact.state} => {
-    let updatedTopstories = Array.concat [state.topstories, data];
-    ReasonReact.Update {topstories: updatedTopstories, page: page + 1, loading: false}
-  };
-  let loadNextPage self => {
-    let {ReasonReact.state} = self;
+  let loadNextPage {ReasonReact.state: state, reduce} =>
     if (state.page < 4) {
-      StoryData.fetchTopStories state.page (self.update handleLoaded) |> ignore;
-      ReasonReact.Update {...state, loading: true}
-    } else {
-      ReasonReact.NoUpdate;
+      StoryData.fetchTopStories state.page (reduce (fun payload => Loaded payload)) |> ignore;
+      reduce (fun () => Loading) ()
     };
-  };
-  let handleScroll _ self => {
-    let {ReasonReact.state} = self;
-    if (nearTheBottom () && not state.loading) {
-      loadNextPage self
-    } else {
-      ReasonReact.NoUpdate;
-    };
-  };
-
   {
     ...component,
-    initialState: fun () :state => {topstories: [||], page: 0, loading: false},
-
+    initialState: fun () => ({topstories: [||], page: 0, loading: false}: state),
+    reducer: fun action state =>
+      switch action {
+      | Loading => ReasonReact.Update {...state, loading: true}
+      | Loaded (page, data) =>
+        let updatedTopstories = Array.concat [state.topstories, data];
+        ReasonReact.Update {topstories: updatedTopstories, page: page + 1, loading: false}
+      | Scroll =>
+        ReasonReact.SideEffects (
+          fun self =>
+            if (nearTheBottom () && not self.state.loading) {
+              loadNextPage self
+            }
+        )
+      },
     didMount: fun self => {
-      Dom.(Window.addEventListener "scroll" (self.update handleScroll) window);
-      loadNextPage self
+      Dom.(Window.addEventListener "scroll" (self.reduce (fun _ => Scroll)) window);
+      loadNextPage self;
+      ReasonReact.NoUpdate
     },
     render: fun self => {
       let storyArray =

@@ -3,13 +3,16 @@ open Utils;
 requireCSS "src/CommentsPage.css";
 
 type state = {story_with_comments: option StoryData.story_with_comments};
+
 let name = "CommentsPage";
-let component = ReasonReact.statefulComponent name;
+
+type action =
+  | Loaded StoryData.story_with_comments
+[@@bs.deriving {accessors: accessors}];
+
+let component = ReasonReact.reducerComponent name;
 
 let make ::id _children => {
-
-  let handleLoaded data _self => ReasonReact.Update {story_with_comments: Some data};
-
   let renderTitle (story: StoryData.story_with_comments) => {
     let title = <h2 className="CommentsPage_title"> (textEl story.title) </h2>;
     let link =
@@ -30,9 +33,13 @@ let make ::id _children => {
   {
     ...component,
     initialState: fun () => {story_with_comments: None},
+    reducer: fun action _state =>
+      switch action {
+      | Loaded data => ReasonReact.Update {story_with_comments: Some data}
+      },
     didMount: fun self => {
-      StoryData.fetchStoryWithComments id (self.update handleLoaded) |> ignore;
-      ReasonReact.NoUpdate;
+      StoryData.fetchStoryWithComments id (self.reduce loaded) |> ignore;
+      ReasonReact.NoUpdate
     },
     render: fun {state} => {
       let commentList =
