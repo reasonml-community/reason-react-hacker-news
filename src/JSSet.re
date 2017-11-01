@@ -1,22 +1,22 @@
-type set 'a =
-  | JSSet 'a;
+type set('a) =
+  | JSSet('a);
 
-external empty : unit => set 'a = "Set" [@@bs.new];
+[@bs.new] external empty : unit => set('a) = "Set";
 
-external add : set 'a => 'a => set 'a = "add" [@@bs.send];
+[@bs.send] external add : (set('a), 'a) => set('a) = "add";
 
-external delete_internal : set 'a => 'a => unit = "delete" [@@bs.send];
+[@bs.send] external delete_internal : (set('a), 'a) => unit = "delete";
 
-external has_internal : set 'a => 'a => Js.boolean = "has" [@@bs.send];
+[@bs.send] external has_internal : (set('a), 'a) => Js.boolean = "has";
 
-let has s v => Js.to_bool (has_internal s v);
+let has = (s, v) => Js.to_bool(has_internal(s, v));
 
-let remove s v => {
-  delete_internal s v;
+let remove = (s, v) => {
+  delete_internal(s, v);
   s
 };
 
-let create (values: array 'a) => {
-  let empty_set = empty ();
-  Array.fold_left add empty_set values
+let create = (values: array('a)) => {
+  let empty_set = empty();
+  Array.fold_left(add, empty_set, values)
 };

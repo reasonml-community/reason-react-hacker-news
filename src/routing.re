@@ -1,3 +1,3 @@
 type route =
   | Home
-  | Comments int;
+  | Comments(int);
