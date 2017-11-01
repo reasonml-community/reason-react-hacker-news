@@ -389,9 +389,9 @@ bs-json@buckletypes/bs-json:
   version "0.0.1"
   resolved "https://codeload.github.com/buckletypes/bs-json/tar.gz/61270470b7483dca5b4be408d718299aea1701ef"
 
-bs-platform@1.9.1:
-  version "1.9.1"
-  resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-1.9.1.tgz#1195562f0f8b131cc758693e7c9b31d7e0022001"
+bs-platform@~2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-2.0.0.tgz#17ee607fa829f67b8b920438ebca5ec1deab3276"
 
 bs-webapi@^0.4.1:
   version "0.4.1"
