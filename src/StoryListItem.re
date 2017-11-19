@@ -4,11 +4,9 @@ requireCSS("src/StoryListItem.css");
 
 let commentIcon = requireAssetURI("src/comment.png");
 
-let name = "StoryListItem";
-
-let component = ReasonReact.statelessComponent(name);
-
+let component = ReasonReact.statelessComponent("StoryListItem");
 let make = (~story: StoryData.story, ~index: int, _children) => {
+
   let renderTitle = () => {
     let content =
       <div className="StoryListItem_storyTitle">
@@ -16,16 +14,20 @@ let make = (~story: StoryData.story, ~index: int, _children) => {
         (textEl(". "))
         <span className="StoryListItem_storyTitleText"> (textEl(story.title)) </span>
       </div>;
-    let link =
-      switch story.url {
-      | Some(url) => <a href=url className="StoryListItem_link"> content </a>
-      | None =>
-        <a href=("#/comments/" ++ string_of_int(story.id)) className="StoryListItem_link">
-          content
-        </a>
-      };
-    <div> link </div>
+
+    <div>
+      (
+        switch story.url {
+        | Some(url) => <a href=url className="StoryListItem_link"> content </a>
+        | None =>
+          <a href=("#/comments/" ++ string_of_int(story.id)) className="StoryListItem_link">
+            content
+          </a>
+        }
+      )
+    </div>
   };
+
   let renderByline = () =>
     <div className="StoryListItem_row StoryListItem_byline">
       /* TODO: badge */
@@ -34,14 +36,20 @@ let make = (~story: StoryData.story, ~index: int, _children) => {
         (textEl(" points"))
         <span>
           <span className="StoryListItem_storyTime">
-            (textEl(" submitted " ++ (fromNow(story.time) ++ (" by " ++ story.by))))
+            ({
+              let time = story.time;
+              let by = story.by;
+              textEl({j| submitted $time by $by|j})
+            })
           </span>
         </span>
       </div>;
+
   let renderArticleButton = () =>
     <div className="StoryListItem_flexRow">
       <div className="StoryListItem_storyCell"> (renderTitle()) (renderByline()) </div>
     </div>;
+
   let renderCommentsButton = () =>
     <div className="StoryListItem_commentsCell">
       <a href=("#/comments/" ++ string_of_int(story.id)) className="StoryListItem_link">
@@ -54,6 +62,7 @@ let make = (~story: StoryData.story, ~index: int, _children) => {
         </div>
       </a>
     </div>;
+
   {
     ...component,
     render: (_self) =>

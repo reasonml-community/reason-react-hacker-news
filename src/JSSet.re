@@ -2,17 +2,12 @@ type set('a) =
   | JSSet('a);
 
 [@bs.new] external empty : unit => set('a) = "Set";
-
 [@bs.send] external add : (set('a), 'a) => set('a) = "add";
+[@bs.send] external has : (set('a), 'a) => bool = "has";
 
-[@bs.send] external delete_internal : (set('a), 'a) => unit = "delete";
-
-[@bs.send] external has_internal : (set('a), 'a) => Js.boolean = "has";
-
-let has = (s, v) => Js.to_bool(has_internal(s, v));
-
+[@bs.send] external remove : (set('a), 'a) => unit = "delete";
 let remove = (s, v) => {
-  delete_internal(s, v);
+  remove(s, v);
   s
 };
 
