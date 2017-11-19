@@ -5,7 +5,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "NODE_ENV=production yarn build",
     "start": "yarn run dev | yarn run bsb-watch",
     "dev": "webpack-dev-server",
     "static": "node scripts/serveStatic.js",
