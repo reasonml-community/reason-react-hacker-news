@@ -1,44 +1,52 @@
 open Utils;
 
-requireCSS "src/CommentsPage.css";
+requireCSS("src/CommentsPage.css");
 
-type state = {story_with_comments: option StoryData.story_with_comments};
+type state = {story_with_comments: option(StoryData.story_with_comments)};
+
 let name = "CommentsPage";
-let component = ReasonReact.statefulComponent name;
 
-let make ::id _children => {
+[@bs.deriving {accessors: accessors}]
+type action =
+  | Loaded(StoryData.story_with_comments);
 
-  let handleLoaded data _self => ReasonReact.Update {story_with_comments: Some data};
+let component = ReasonReact.reducerComponent(name);
 
-  let renderTitle (story: StoryData.story_with_comments) => {
-    let title = <h2 className="CommentsPage_title"> (textEl story.title) </h2>;
+let make = (~id, _children) => {
+  let renderTitle = (story: StoryData.story_with_comments) => {
+    let title = <h2 className="CommentsPage_title"> (textEl(story.title)) </h2>;
     let link =
       switch story.url {
-      | Some url => <a href=url className="CommentsPage_titleLink"> title </a>
+      | Some(url) => <a href=url className="CommentsPage_titleLink"> title </a>
       | None => title
       };
     <div> link </div>
   };
-  let renderByline (story: StoryData.story_with_comments) =>
+  let renderByline = (story: StoryData.story_with_comments) =>
     <div>
-      <span> (intEl story.score) </span>
-      (textEl " points")
+      <span> (intEl(story.score)) </span>
+      (textEl(" points"))
       <span>
-        <span> (textEl (" submitted " ^ fromNow story.time ^ " by " ^ story.by)) </span>
+        <span> (textEl(" submitted " ++ (fromNow(story.time) ++ (" by " ++ story.by)))) </span>
       </span>
     </div>;
   {
     ...component,
-    initialState: fun () => {story_with_comments: None},
-    didMount: fun self => {
-      StoryData.fetchStoryWithComments id (self.update handleLoaded) |> ignore;
-      ReasonReact.NoUpdate;
+    initialState: () => {story_with_comments: None},
+    reducer: (action, _state) =>
+      switch action {
+      | Loaded(data) => ReasonReact.Update({story_with_comments: Some(data)})
+      },
+    didMount: (self) => {
+      StoryData.fetchStoryWithComments(id, self.reduce(loaded)) |> ignore;
+      ReasonReact.NoUpdate
     },
-    render: fun {state} => {
+    render: ({state}) => {
       let commentList =
         switch state.story_with_comments {
-        | Some story => <div> (renderTitle story) (renderByline story) <CommentList story /> </div>
-        | None => ReasonReact.stringToElement "loading"
+        | Some(story) =>
+          <div> (renderTitle(story)) (renderByline(story)) <CommentList story /> </div>
+        | None => ReasonReact.stringToElement("loading")
         };
       <div> commentList </div>
     }

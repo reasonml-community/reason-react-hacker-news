@@ -4,9 +4,8 @@
   an issue! */
 {
   "name": "reason-react-hacker-news",
-  "reason": {
-    "react-jsx": 2
-  },
+  "bsc-flags": ["-bs-no-version-header", "-bs-super-errors"],
+  "reason": {"react-jsx": 2},
   "package-specs": ["commonjs", "es6"],
   "bs-dependencies": [
     "reason-react",
@@ -15,6 +14,7 @@
     "bs-director",
     "bs-webapi"
   ],
+  "refmt": 3,
   "sources": [
     {
       "dir": "src"
