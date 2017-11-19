@@ -1,8 +1,6 @@
-let apiBaseUrl = "https://serverless-api.hackernewsmobile.com/";
-
-let topStoriesUrl = (page) => apiBaseUrl ++ ("topstories-25-" ++ (string_of_int(page) ++ ".json"));
-
-let storyUrl = (id) => apiBaseUrl ++ ("stories/" ++ (string_of_int(id) ++ ".json"));
+let apiBaseUrl = "https://serverless-api.hackernewsmobile.com";
+let topStoriesUrl = page => {j|$apiBaseUrl/topstories-25-$page.json|j};
+let storyUrl = id => {j|$apiBaseUrl/stories/$id.json|j};
 
 type story = {
   by: string,
@@ -46,101 +44,96 @@ type story_with_comments = {
 
 type topstories = array(story);
 
-let parseIdsArray = (json) : array(int) => Json.Decode.(json |> array(int));
+module Decode = {
+  let idsArray = (json) : array(int) => Json.Decode.(json |> array(int));
 
-let getCommentId = (comment) =>
-  switch comment {
-  | CommentDeleted(c) => c.id
-  | CommentPresent(c) => c.id
-  };
-
-let parseComment = (json) : comment => {
-  let deletedMaybe = Json.Decode.(json |> optional(field("deleted", bool)));
-  let deleted =
-    switch deletedMaybe {
-    | Some(v) => v == true
-    | None => false
+  let getCommentId = (comment) =>
+    switch comment {
+    | CommentDeleted(c) => c.id
+    | CommentPresent(c) => c.id
     };
-  if (deleted) {
-    CommentDeleted(Json.Decode.{id: json |> field("id", int)})
-  } else {
-    CommentPresent(
-      Json.Decode.{
-        by: json |> field("by", string),
-        id: json |> field("id", int),
-        parent: json |> field("parent", int),
-        kids: json |> optional(field("kids", parseIdsArray)),
-        text: json |> optional(field("text", string)),
-        time: json |> field("time", int)
-      }
-    )
-  }
-};
 
-let parseCommentsArray = (json) : comments_map => {
-  let commentsArray = Json.Decode.(json |> array(parseComment));
-  let commentsArrayOfPairs =
-    Array.map((comment: comment) => (getCommentId(comment), comment), commentsArray);
-  JSMap.create(commentsArrayOfPairs)
-};
-
-let parseStoryWithComments = (json) : story_with_comments =>
-  Json.Decode.{
-    by: json |> field("by", string),
-    descendants: json |> field("descendants", int),
-    descendentIds: json |> field("descendentIds", parseIdsArray),
-    comments: json |> field("comments", parseCommentsArray),
-    id: json |> field("id", int),
-    kids: json |> optional(field("kids", parseIdsArray)),
-    score: json |> field("score", int),
-    time: json |> field("time", int),
-    title: json |> field("title", string),
-    url: json |> optional(field("url", string))
+  let comment = (json) : comment => {
+    let deletedMaybe = Json.Decode.(json |> optional(field("deleted", bool)));
+    let deleted =
+      switch deletedMaybe {
+      | Some(v) => v == true
+      | None => false
+      };
+    if (deleted) {
+      CommentDeleted(Json.Decode.{id: json |> field("id", int)})
+    } else {
+      CommentPresent(
+        Json.Decode.{
+          by: json |> field("by", string),
+          id: json |> field("id", int),
+          parent: json |> field("parent", int),
+          kids: json |> optional(field("kids", idsArray)),
+          text: json |> optional(field("text", string)),
+          time: json |> field("time", int)
+        }
+      )
+    }
   };
 
-let parseStory = (json) : story =>
-  Json.Decode.{
-    by: json |> field("by", string),
-    descendants: json |> field("descendants", int),
-    id: json |> field("id", int),
-    score: json |> field("score", int),
-    time: json |> field("time", int),
-    title: json |> field("title", string),
-    url: json |> optional(field("url", string))
-  };
+  let commentsArray = (json) : comments_map =>
+    json |> Json.Decode.array(comment)
+         |> Array.map(comment => (getCommentId(comment), comment))
+         |> JSMap.create;
 
-let parseStories = (json) : array(story) => Json.Decode.(json |> array(parseStory));
+  let storyWithComments = (json) : story_with_comments =>
+    Json.Decode.{
+      by: json |> field("by", string),
+      descendants: json |> field("descendants", int),
+      descendentIds: json |> field("descendentIds", idsArray),
+      comments: json |> field("comments", commentsArray),
+      id: json |> field("id", int),
+      kids: json |> optional(field("kids", idsArray)),
+      score: json |> field("score", int),
+      time: json |> field("time", int),
+      title: json |> field("title", string),
+      url: json |> optional(field("url", string))
+    };
+
+  let story = (json) : story =>
+    Json.Decode.{
+      by: json |> field("by", string),
+      descendants: json |> field("descendants", int),
+      id: json |> field("id", int),
+      score: json |> field("score", int),
+      time: json |> field("time", int),
+      title: json |> field("title", string),
+      url: json |> optional(field("url", string))
+    };
+
+  let stories = (json) : array(story) =>
+    Json.Decode.(json |> array(story));
+};
 
 let fetchTopStories = (page, callback) =>
   Js.Promise.(
-    Bs_fetch.fetch(topStoriesUrl(page))
-    |> then_(Bs_fetch.Response.text)
-    |> then_(
-         (text) =>
-           Js.Json.parseExn(text)
-           |> parseStories
-           |> (
-             (stories) => {
-               callback((page, stories));
-               resolve(None)
-             }
-           )
+    Fetch.fetch(topStoriesUrl(page))
+    |> then_(Fetch.Response.json)
+    |> then_(json =>
+        json  |> Decode.stories
+              |> stories => {
+                   callback((page, stories));
+                   resolve(())
+                 }
        )
+    |> ignore /* TODO: error handling */
   );
 
 let fetchStoryWithComments = (id, callback) =>
   Js.Promise.(
-    Bs_fetch.fetch(storyUrl(id))
-    |> then_(Bs_fetch.Response.text)
-    |> then_(
-         (text) =>
-           Js.Json.parseExn(text)
-           |> parseStoryWithComments
-           |> (
-             (stories) => {
-               callback(stories);
-               resolve(None)
-             }
-           )
+    Fetch.fetch(storyUrl(id))
+    |> then_(Fetch.Response.json)
+    |> then_(json =>
+        json  |> Decode.storyWithComments
+              |> stories => {
+                   callback(stories);
+                   resolve(())
+                 }
        )
+    |> ignore /* TODO: error handling */
   );

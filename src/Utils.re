@@ -1,6 +1,4 @@
-/* require css file for side effect only */
-[@bs.val] external requireCSS : string => unit = "require";
-
+/* require css file for side effect only */[@bs.val] external requireCSS : string => unit = "require";
 /* require an asset (eg. an image) and return exported string value (image URI) */
 [@bs.val] external requireAssetURI : string => string = "require";
 
@@ -18,16 +16,24 @@ let fromNow = (unixtime) => {
   }
 };
 
-[@bs.send] external internal_getAttribute : (Js.t('a), string) => Js.null(string) = "getAttribute";
+[@bs.send] [@bs.return nullable] external getAttribute : (Js.t('a), string) => option(string) = "getAttribute";
 
-let getAttribute = (node, name) => Js.Null.to_opt(internal_getAttribute(node, name));
+let dangerousHtml : string => Js.t('a) = html => {
+  "__html": html
+};
 
-[@bs.module "src/UtilsJS"] external dangerousHtml : string => Js.t('a) = "dangerousHtml";
+let distanceFromBottom : unit => int = () => {
+  let bodyClientHeight = [%raw "document.body.clientHeight"];
+  let windowScrollY = [%raw "window.scrollY"];
+  let windowInnerHeight = [%raw "window.innerHeight"];
+  bodyClientHeight - (windowScrollY + windowInnerHeight)
+};
 
-[@bs.module "src/UtilsJS"] external distanceFromBottom : unit => int = "distanceFromBottom";
+[@bs.module] external registerServiceWorker : unit => unit = "src/registerServiceWorker";
 
-[@bs.module "src/UtilsJS"] external registerServiceWorker : unit => unit = "registerServiceWorker";
+let intEl = (n) =>
+  n |> string_of_int
+    |> ReasonReact.stringToElement;
 
-let intEl = (n) => ReasonReact.stringToElement(string_of_int(n));
-
-let textEl = (str) => ReasonReact.stringToElement(str);
+let textEl = ReasonReact.stringToElement;
+let arrayEl = ReasonReact.arrayToElement;

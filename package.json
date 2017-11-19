@@ -21,13 +21,13 @@
   "license": "MIT",
   "dependencies": {
     "bs-director": "^0.0.1",
-    "bs-fetch": "buckletypes/bs-fetch",
-    "bs-json": "buckletypes/bs-json",
-    "bs-webapi": "^0.4.1",
+    "bs-fetch": "^0.2.0",
+    "bs-json": "^0.2.4",
+    "bs-webapi": "^0.7.0",
     "moment": "^2.18.1",
-    "react": "^15.4.2",
-    "react-dom": "^15.4.2",
-    "reason-react": "^0.2.4"
+    "react": "^16.1.1",
+    "react-dom": "^16.1.1",
+    "reason-react": "^0.3.0"
   },
   "devDependencies": {
     "bs-platform": "~2.0.0",

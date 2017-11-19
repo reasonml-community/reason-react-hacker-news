@@ -6,3 +6,4 @@
 /build/
 *.log
 .DS_Store
+.bsb.lock
