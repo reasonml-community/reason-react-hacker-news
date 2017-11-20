@@ -5,14 +5,15 @@ const ClosureCompilerPlugin = require('webpack-closure-compiler');
 const StatsWriterPlugin = require('webpack-stats-plugin').StatsWriterPlugin;
 const ManifestPlugin = require('webpack-manifest-plugin');
 const ShakePlugin = require('webpack-common-shake').Plugin;
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 const rollupPluginNodeResolve = require('rollup-plugin-node-resolve');
 
 const prod = process.env.NODE_ENV == 'production';
 const dev = !prod && process.env.DEV !== '0';
 const analyze = process.env.NODE_ENV == 'analyze';
-const useRollup = prod || process.env.ROLLUP == '1';
-const useShakePlugin = process.env.SHAKE == '1';
+const useRollup = process.env.ROLLUP == '1';
+const useShakePlugin = prod || process.env.SHAKE == '1';
 const useClosureCompiler = process.env.CLOSURE === '1';
 
 let publicUrl = '';
@@ -96,9 +97,9 @@ module.exports = {
           concurrency: 3,
         })
       : null,
-    prod ? new webpack.optimize.UglifyJsPlugin() : null,
+    prod ? new UglifyJsPlugin() : null,
     analyze
-      ? new webpack.optimize.UglifyJsPlugin({
+      ? new UglifyJsPlugin({
           compress: {
             warnings: false,
           },
