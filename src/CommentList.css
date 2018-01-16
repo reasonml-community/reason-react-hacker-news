@@ -1,4 +1,3 @@
-
 .CommentList_inline {
   flex-direction: row;
 }
@@ -7,8 +6,12 @@
   opacity: 0.3;
 }
 
+.CommentList_error {
+  color: #ffbbbb;
+}
+
 .CommentList_textMuted {
-  color: #BBBBBB;
+  color: #bbbbbb;
 }
 
 .CommentList_comment {
@@ -19,7 +22,7 @@
 
 .CommentList_commentBody {
   padding-left: 10px;
-  border-left-color: #BBBBBB;
+  border-left-color: #bbbbbb;
   border-left-width: 1px;
 }
 

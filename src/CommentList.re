@@ -82,10 +82,10 @@ let make = (~story: StoryData.story_with_comments, _children) => {
             </div>
 
           | StoryData.CommentDeleted(_) =>
-            <div> (textEl("[deleted]")) </div>
+            <div className="CommentList_error"> (textEl("[comment deleted (id="++string_of_int(id)++")]")) </div>
           }
 
-        | None => raise(Exit)
+        | None => <div className="CommentList_error"> (textEl("[comment not loaded (id="++string_of_int(id)++")]")) </div>
         }
       )
     </div>
