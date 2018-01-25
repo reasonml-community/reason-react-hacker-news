@@ -36,7 +36,7 @@ module.exports = {
     },
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.png$/,
         loader: 'file-loader',
@@ -100,10 +100,14 @@ module.exports = {
     prod ? new UglifyJsPlugin() : null,
     analyze
       ? new UglifyJsPlugin({
-          compress: {
-            warnings: false,
-          },
-          comments: /^\**!|^ [0-9]+ $|@preserve|@license/,
+          uglifyOptions: {
+            compress: {
+              warnings: false,
+            },
+            output: {
+              comments: /^\**!|^ [0-9]+ $|@preserve|@license/,
+            },
+          }
         })
       : null,
     true

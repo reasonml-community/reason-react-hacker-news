@@ -10,7 +10,7 @@
   "bs-dependencies": [
     "reason-react",
     "bs-fetch",
-    "bs-json",
+    "@glennsl/bs-json",
     "bs-director",
     "bs-webapi"
   ],
