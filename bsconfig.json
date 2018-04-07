@@ -11,7 +11,6 @@
     "reason-react",
     "bs-fetch",
     "@glennsl/bs-json",
-    "bs-director",
     "bs-webapi"
   ],
   "refmt": 3,
