@@ -20,9 +20,9 @@ let make = (~story: StoryData.story, ~index: int, _children) => {
         switch story.url {
         | Some(url) => <a href=url className="StoryListItem_link"> content </a>
         | None =>
-          <a href=("/comments/" ++ string_of_int(story.id)) className="StoryListItem_link">
+          <Link href=("/comments/" ++ string_of_int(story.id)) className="StoryListItem_link">
             content
-          </a>
+          </Link>
         }
       )
     </div>
@@ -52,7 +52,7 @@ let make = (~story: StoryData.story, ~index: int, _children) => {
 
   let renderCommentsButton = () =>
     <div className="StoryListItem_commentsCell">
-      <a href=("/comments/" ++ string_of_int(story.id)) className="StoryListItem_link">
+      <Link href=("/comments/" ++ string_of_int(story.id)) className="StoryListItem_link">
         <div> <img alt="comments" className="StoryListItem_icon" src=commentIcon /> </div>
         <div>
           <span className="StoryListItem_commentsText">
@@ -60,7 +60,7 @@ let make = (~story: StoryData.story, ~index: int, _children) => {
             (textEl(" comments"))
           </span>
         </div>
-      </a>
+      </Link>
     </div>;
 
   {
