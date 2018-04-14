@@ -5,7 +5,7 @@ requireCSS("src/StoryListItem.css");
 let commentIcon = requireAssetURI("src/comment.png");
 
 let component = ReasonReact.statelessComponent("StoryListItem");
-let make = (~story: StoryData.story, ~index: int, _children) => {
+let make = (~story: HackerNews.story, ~index: int, _children) => {
 
   let renderTitle = () => {
     let content =
@@ -31,14 +31,17 @@ let make = (~story: StoryData.story, ~index: int, _children) => {
   let renderByline = () =>
     <div className="StoryListItem_row StoryListItem_byline">
       /* TODO: badge */
-
-        <span className="StoryListItem_number"> (intEl(story.score)) </span>
-        (textEl(" points"))
+        {
+          switch (story.points) {
+            | None => textEl("")
+            | Some(points) => intEl(points) /*<span className="StoryListItem_number">intEl(points)</span> (textEl(" points"))*/
+          }
+        }
         <span>
           <span className="StoryListItem_storyTime">
             ({
               let time = story.time;
-              let by = story.by;
+              let by = story.user;
               textEl({j| submitted $time by $by|j})
             })
           </span>
@@ -56,7 +59,7 @@ let make = (~story: StoryData.story, ~index: int, _children) => {
         <div> <img alt="comments" className="StoryListItem_icon" src=commentIcon /> </div>
         <div>
           <span className="StoryListItem_commentsText">
-            <span className="StoryListItem_number"> (intEl(story.descendants)) </span>
+            <span className="StoryListItem_number"> (intEl(story.comments_count)) </span>
             (textEl(" comments"))
           </span>
         </div>

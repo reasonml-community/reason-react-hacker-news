@@ -1,13 +1,13 @@
 open Utils;
 
 type state = {
-  topstories: StoryData.topstories,
+  topstories: HackerNews.stories,
   page: int,
   loading: bool
 };
 
 type action =
-  | Loaded((int, StoryData.topstories))
+  | Loaded((int, HackerNews.stories))
   | Loading
   | Scroll;
 
@@ -17,7 +17,7 @@ let make = (_children) => {
   let nearTheBottom = () => distanceFromBottom() < 100;
   let loadNextPage = ({ReasonReact.state, reduce}) =>
     if (state.page < 4) {
-      StoryData.fetchTopStories(state.page, reduce(payload => Loaded(payload))) |> ignore;
+      HackerNews.fetchTopStories(state.page, reduce(payload => Loaded(payload))) |> ignore;
       reduce(() => Loading, ())
     };
 
@@ -34,7 +34,7 @@ let make = (_children) => {
       switch action {
       | Loading =>
         ReasonReact.Update({...state, loading: true})
-       
+
       | Loaded((page, data)) =>
         let updatedTopstories = Array.concat([state.topstories, data]);
         ReasonReact.Update({
