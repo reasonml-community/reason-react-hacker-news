@@ -1,0 +1,19 @@
+.routeLoading {
+  animation-delay: 0.4s;
+  animation-duration: 0.4s;
+  animation-fill-mode: forwards;
+  animation-name: showLoader;
+  display: flex;
+  justify-content: center;
+  padding-top: 3rem;
+  visibility: hidden;
+}
+
+@keyframes showLoader {
+  0% {
+    visibility: hidden;
+  }
+  100% {
+    visibility: visible;
+  }
+}

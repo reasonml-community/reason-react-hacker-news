@@ -1,0 +1,13 @@
+.mainView {
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+.viewHasHeader {
+  margin-top: 105px;
+  margin-bottom: 2rem;
+}
+
+.list {
+  padding-top: 4rem;
+}

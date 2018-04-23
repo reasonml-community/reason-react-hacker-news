@@ -3,20 +3,20 @@ open Utils;
 requireCSS("src/CommentsPage.css");
 
 type state = {
-  story_with_comments: option(StoryData.story_with_comments)
+  story_with_comments: option(HackerNews.story_with_comments)
 };
 
 [@bs.deriving {accessors: accessors}]
 type action =
-  | Loaded(StoryData.story_with_comments);
+  | Loaded(HackerNews.story_with_comments);
 
 let component = ReasonReact.reducerComponent("CommentsPage");
 let make = (~id, _children) => {
 
-  let renderTitle = (story: StoryData.story_with_comments) => {
+  let renderTitle = (story: HackerNews.story_with_comments) => {
     let title = <h2 className="CommentsPage_title"> (textEl(story.title)) </h2>;
 
-    <div> 
+    <div>
       (
         switch story.url {
         | Some(url) => <a href=url className="CommentsPage_titleLink"> title </a>
@@ -26,15 +26,15 @@ let make = (~id, _children) => {
     </div>
   };
 
-  let renderByline = (story: StoryData.story_with_comments) =>
+  let renderByline = (story: HackerNews.story_with_comments) =>
     <div>
-      <span> (intEl(story.score)) </span>
+      /* <span> (intEl(story.points)) </span> */
       (textEl(" points"))
       <span>
         <span>
           ({
             let time = story.time;
-            let by = story.by;
+            let by = story.user;
             textEl({j| submitted $time by $by|j})
           })
         </span>
@@ -56,7 +56,7 @@ let make = (~id, _children) => {
       },
 
     didMount: (self) => {
-      StoryData.fetchStoryWithComments(id, self.reduce(loaded));
+      HackerNews.fetchStoryWithComments(id, self.reduce(loaded));
       ReasonReact.NoUpdate
     },
 

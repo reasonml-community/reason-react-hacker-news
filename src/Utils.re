@@ -1,4 +1,23 @@
-/* require css file for side effect only */[@bs.val] external requireCSS : string => unit = "require";
+/* require css file for side effect only */
+[@bs.val] external requireCSS : string => unit = "require";
+/* require css module file */
+[@bs.val] external requireCSSModule : string => Js_dict.t(string) = "require";
+/* get class name out of css modules object */
+let className = (styles, key) => Js_dict.unsafeGet(styles, key);
+/* get class names based on filter and concatenate into single string */
+let classNameFilter = (styles, classes) =>
+  Array.fold_left((curr, next) => {
+    let (className, predicate) = next;
+    if (!predicate) {
+      curr
+    } else {
+      switch (Js_dict.get(styles, className)) {
+        | None => curr /* ignoring error */
+        | Some(value) => curr ++ " " ++ value
+      }
+    }
+  }, "", classes);
+
 /* require an asset (eg. an image) and return exported string value (image URI) */
 [@bs.val] external requireAssetURI : string => string = "require";
 
