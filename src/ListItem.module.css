@@ -1,0 +1,36 @@
+.article {
+  display: flex;
+  padding: 0.5rem 1rem 0.5rem 0;
+}
+
+.index {
+  font-size: 1.5rem;
+  font-weight: 200;
+  margin-right: 1rem;
+  color: #666;
+  text-align: right;
+  min-width: 3rem;
+}
+
+.outboundLink {
+  display: block;
+  font-weight: 400;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+  text-decoration: none;
+  color: #000;
+}
+
+.metadata > p {
+  font-size: 0.8rem;
+  color: #666;
+}
+.author {
+  color: #666;
+}
+.commentCount {
+  color: #666;
+  padding-left: 0.5rem;
+  margin-left: 0.5em;
+  border-left: 1px solid #ccc;
+}

@@ -1,0 +1,23 @@
+.text {
+  line-height: 1.15;
+  margin-bottom: 1rem;
+}
+.comment {
+  border-bottom: 1px solid #ececec;
+  padding-bottom: 1rem;
+}
+.comment a {
+  word-break: break-all;
+}
+.text p {
+  margin: 1rem 0 0;
+  word-break: break-word;
+}
+.text pre {
+  white-space: pre-wrap;
+}
+.text code {
+  white-space: pre-line;
+  display: block;
+  overflow-y: scroll;
+}

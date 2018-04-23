@@ -1,11 +1,14 @@
 /* https://github.com/tastejs/hacker-news-pwas/blob/master/docs/api.md */
 let apiBaseUrl = "https://api.hnpwa.com/v0";
+/* let apiBaseUrl = ""; */
 
 let topStoriesUrl = page => {j|$apiBaseUrl/newest/$page.json|j};
 let newsStoriesUrl = page => {j|$apiBaseUrl/news/$page.json|j};
 let askStoriesUrl = page => {j|$apiBaseUrl/ask/$page.json|j};
 let showStoriesUrl = page => {j|$apiBaseUrl/show/$page.json|j};
-let jobStoriesUrl = page => {j|$apiBaseUrl/show/$page.json|j};
+let jobStoriesUrl = page => {j|$apiBaseUrl/jobs/$page.json|j};
+
+/* type storyType = top | new | ask | show | job; */
 
 type story = {
   id: int,
@@ -93,7 +96,30 @@ module Decode = {
 
 let fetchTopStories = (page, callback) =>
   Js.Promise.(
-    Fetch.fetch(topStoriesUrl(page+1))
+    Fetch.fetch(topStoriesUrl(page))
+    |> then_(Fetch.Response.json)
+    |> then_(json =>
+        json  |> Decode.stories
+              |> stories => {
+                   callback((page, stories));
+                   resolve(())
+                 }
+       )
+    |> ignore /* TODO: error handling */
+  );
+
+let storyTypeToUrl = (storyType, page) =>
+  switch storyType {
+  | "top" => topStoriesUrl(page)
+  | "news" => newsStoriesUrl(page)
+  | "ask" => askStoriesUrl(page)
+  | "show" => showStoriesUrl(page)
+  | "jobs" => jobStoriesUrl(page)
+  };
+
+let fetchStories = (storyType, page, callback) =>
+  Js.Promise.(
+    Fetch.fetch(storyTypeToUrl(storyType, page))
     |> then_(Fetch.Response.json)
     |> then_(json =>
         json  |> Decode.stories

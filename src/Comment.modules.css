@@ -1,0 +1,26 @@
+.comments {
+  padding: 0 1.5rem;
+}
+.numberOfComments {
+  border-bottom: 1px solid #ececec;
+  margin-bottom: .75rem;
+  padding-bottom: .75rem;
+}
+
+.comment {
+  margin: 0 0 1.5rem;
+}
+.header {
+  margin: 0 0 1rem 0;
+}
+.userLink {
+  color: #666;
+}
+.ago {
+  padding-left: .5rem;
+  color: #666;
+  font-size: .85rem;
+}
+.kids {
+  padding: 0 0 0 1rem;
+}
