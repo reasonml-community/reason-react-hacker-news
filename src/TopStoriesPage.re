@@ -1,3 +1,4 @@
+open Belt;
 open Utils;
 
 type state = {
@@ -28,7 +29,7 @@ let make = _children => {
       switch (action) {
       | Loading => ReasonReact.Update({...state, loading: true})
       | Loaded((page, data)) =>
-        let updatedTopstories = Array.concat([state.topstories, data]);
+        let updatedTopstories = Array.concat(state.topstories, data);
         ReasonReact.Update({
           topstories: updatedTopstories,
           page: page + 1,
@@ -55,10 +56,10 @@ let make = _children => {
         (
           if (Array.length(self.state.topstories) > 0) {
             self.state.topstories
-            |> Array.mapi((index, story) =>
+            |. Array.mapWithIndex((index, story) =>
                  <StoryListItem key=(string_of_int(index)) index story />
                )
-            |> ReasonReact.array;
+            |. ReasonReact.array;
           } else {
             ReasonReact.null;
           }

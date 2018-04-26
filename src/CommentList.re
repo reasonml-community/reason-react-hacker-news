@@ -1,3 +1,4 @@
+open Belt;
 open Utils;
 
 requireCSS("src/CommentList.css");
@@ -5,7 +6,7 @@ requireCSS("src/CommentList.css");
 type action =
   | Toggle(option(string));
 
-type state = {collapsed_comments: JSSet.set(int)};
+type state = {collapsed_comments: Set.Int.t};
 
 let component = ReasonReact.reducerComponent("CommentList");
 
@@ -14,10 +15,10 @@ let make = (~story: StoryData.story_with_comments, _children) => {
     switch (idMaybe) {
     | Some(idString) =>
       let id = int_of_string(idString);
-      if (JSSet.has(collapsed, id)) {
-        JSSet.remove(collapsed, id);
+      if (Set.Int.has(collapsed, id)) {
+        Set.Int.remove(collapsed, id);
       } else {
-        JSSet.add(collapsed, id);
+        Set.Int.add(collapsed, id);
       };
     | None => collapsed
     };
@@ -42,7 +43,7 @@ let make = (~story: StoryData.story_with_comments, _children) => {
           switch (commentPresentOrDeleted) {
           | StoryData.CommentPresent(comment) =>
             let openComment =
-              ! JSSet.has(state.collapsed_comments, comment.id);
+              ! Set.Int.has(state.collapsed_comments, comment.id);
             <div className="CommentList_comment">
               <div
                 className="CommentList_disclosureRow CommentList_inline"
@@ -102,14 +103,14 @@ let make = (~story: StoryData.story_with_comments, _children) => {
   and renderCommentList = (self, commentIds: option(array(int))) =>
     switch (commentIds) {
     | Some(ids) =>
-      let commentList = Array.map(renderComment(self), ids);
+      let commentList = Array.map(ids, renderComment(self));
       <div> (ReasonReact.array(commentList)) </div>;
     | None => <div />
     };
   {
     ...component,
     initialState: () => {
-      collapsed_comments: JSSet.create([||]: array(int)),
+      collapsed_comments: Set.Int.empty,
     },
     reducer: (action, state) =>
       switch (action) {

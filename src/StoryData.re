@@ -1,3 +1,4 @@
+open Belt;
 let apiBaseUrl = "https://serverless-api.hackernewsmobile.com";
 
 let topStoriesUrl = page => {j|$apiBaseUrl/topstories-25-$page.json|j};
@@ -77,9 +78,8 @@ module Decode = {
     };
   };
   let commentsArray = json : comments_map =>
-    json
-    |> Json.Decode.array(comment)
-    |> Array.map(comment => (getCommentId(comment), comment))
+    Json.Decode.array(comment, json)
+    |. Array.map(comment => (getCommentId(comment), comment))
     |> JSMap.create;
   let storyWithComments = json : story_with_comments =>
     Json.Decode.{
