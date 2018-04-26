@@ -15,10 +15,10 @@ let component = ReasonReact.reducerComponent("TopStoriesPage");
 let make = (_children) => {
 
   let nearTheBottom = () => distanceFromBottom() < 100;
-  let loadNextPage = ({ReasonReact.state, reduce}) =>
+  let loadNextPage = ({ReasonReact.state, send}) =>
     if (state.page < 4) {
-      StoryData.fetchTopStories(state.page, reduce(payload => Loaded(payload))) |> ignore;
-      reduce(() => Loading, ())
+      StoryData.fetchTopStories(state.page, payload => send(Loaded(payload))) |> ignore;
+      send(Loading)
     };
 
   {
@@ -34,7 +34,7 @@ let make = (_children) => {
       switch action {
       | Loading =>
         ReasonReact.Update({...state, loading: true})
-       
+
       | Loaded((page, data)) =>
         let updatedTopstories = Array.concat([state.topstories, data]);
         ReasonReact.Update({
@@ -52,9 +52,8 @@ let make = (_children) => {
       },
 
     didMount: (self) => {
-      Webapi.Dom.(Window.addEventListener("scroll", self.reduce((_) => Scroll), window));
+      Webapi.Dom.(Window.addEventListener("scroll", (_) => self.send(Scroll), window));
       loadNextPage(self);
-      ReasonReact.NoUpdate
     },
 
     render: (self) => {
@@ -64,9 +63,9 @@ let make = (_children) => {
             self.state.topstories
             |> Array.mapi((index, story) =>
               <StoryListItem key=(string_of_int(index)) index story />)
-            |> arrayEl
+            |> ReasonReact.array
           } else {
-            ReasonReact.nullElement
+            ReasonReact.null
           }
         )
       </div>

@@ -6,7 +6,6 @@ type state = {
   story_with_comments: option(StoryData.story_with_comments)
 };
 
-[@bs.deriving {accessors: accessors}]
 type action =
   | Loaded(StoryData.story_with_comments);
 
@@ -14,9 +13,9 @@ let component = ReasonReact.reducerComponent("CommentsPage");
 let make = (~id, _children) => {
 
   let renderTitle = (story: StoryData.story_with_comments) => {
-    let title = <h2 className="CommentsPage_title"> (textEl(story.title)) </h2>;
+    let title = <h2 className="CommentsPage_title"> (ReasonReact.string(story.title)) </h2>;
 
-    <div> 
+    <div>
       (
         switch story.url {
         | Some(url) => <a href=url className="CommentsPage_titleLink"> title </a>
@@ -28,14 +27,14 @@ let make = (~id, _children) => {
 
   let renderByline = (story: StoryData.story_with_comments) =>
     <div>
-      <span> (intEl(story.score)) </span>
-      (textEl(" points"))
+      <span> (ReasonReact.string(string_of_int(story.score))) </span>
+      (ReasonReact.string(" points"))
       <span>
         <span>
           ({
             let time = story.time;
             let by = story.by;
-            textEl({j| submitted $time by $by|j})
+            ReasonReact.string({j| submitted $time by $by|j})
           })
         </span>
       </span>
@@ -56,8 +55,7 @@ let make = (~id, _children) => {
       },
 
     didMount: (self) => {
-      StoryData.fetchStoryWithComments(id, self.reduce(loaded));
-      ReasonReact.NoUpdate
+      StoryData.fetchStoryWithComments(id, data => self.send(Loaded(data)));
     },
 
     render: ({state}) => {
@@ -66,7 +64,7 @@ let make = (~id, _children) => {
           switch state.story_with_comments {
           | Some(story) =>
             <div> (renderTitle(story)) (renderByline(story)) <CommentList story /> </div>
-          | None => textEl("loading")
+          | None => ReasonReact.string("loading")
           }
         )
       </div>

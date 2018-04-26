@@ -5379,9 +5379,9 @@ readdirp@^2.0.0:
     readable-stream "^2.0.2"
     set-immediate-shim "^1.0.1"
 
-reason-react@^0.3.4:
-  version "0.3.4"
-  resolved "https://registry.yarnpkg.com/reason-react/-/reason-react-0.3.4.tgz#afec4073ec0ea8122833f52b7e77219ef8ab8467"
+reason-react@0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/reason-react/-/reason-react-0.4.0.tgz#c3ee831db60abea372fe3e8c2d0b475954f9db70"
   dependencies:
     react ">=15.0.0 || >=16.0.0"
     react-dom ">=15.0.0 || >=16.0.0"

@@ -10,9 +10,9 @@ let make = (~story: StoryData.story, ~index: int, _children) => {
   let renderTitle = () => {
     let content =
       <div className="StoryListItem_storyTitle">
-        (intEl(index + 1))
-        (textEl(". "))
-        <span className="StoryListItem_storyTitleText"> (textEl(story.title)) </span>
+        (ReasonReact.string(string_of_int(index + 1)))
+        (ReasonReact.string(". "))
+        <span className="StoryListItem_storyTitleText"> (ReasonReact.string(story.title)) </span>
       </div>;
 
     <div>
@@ -32,14 +32,14 @@ let make = (~story: StoryData.story, ~index: int, _children) => {
     <div className="StoryListItem_row StoryListItem_byline">
       /* TODO: badge */
 
-        <span className="StoryListItem_number"> (intEl(story.score)) </span>
-        (textEl(" points"))
+        <span className="StoryListItem_number"> (ReasonReact.string(string_of_int(story.score))) </span>
+        (ReasonReact.string(" points"))
         <span>
           <span className="StoryListItem_storyTime">
             ({
               let time = story.time;
               let by = story.by;
-              textEl({j| submitted $time by $by|j})
+              ReasonReact.string({j| submitted $time by $by|j})
             })
           </span>
         </span>
@@ -56,8 +56,8 @@ let make = (~story: StoryData.story, ~index: int, _children) => {
         <div> <img alt="comments" className="StoryListItem_icon" src=commentIcon /> </div>
         <div>
           <span className="StoryListItem_commentsText">
-            <span className="StoryListItem_number"> (intEl(story.descendants)) </span>
-            (textEl(" comments"))
+            <span className="StoryListItem_number"> (ReasonReact.string(string_of_int(story.descendants))) </span>
+            (ReasonReact.string(" comments"))
           </span>
         </div>
       </Link>

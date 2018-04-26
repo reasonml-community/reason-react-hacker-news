@@ -27,7 +27,7 @@ let make = (~story: StoryData.story_with_comments, _children) => {
   let renderCommentText = (textMaybe: option(string)) =>
     switch textMaybe {
     | Some(text) => <div dangerouslySetInnerHTML=(dangerousHtml(text)) />
-    | None => textEl("missing comment")
+    | None => ReasonReact.string("missing comment")
     };
 
   let rec renderCommentKids = (self, comment: StoryData.comment_present) =>
@@ -48,7 +48,7 @@ let make = (~story: StoryData.story_with_comments, _children) => {
 
               <div className="CommentList_disclosureRow CommentList_inline"
                    name=(string_of_int(comment.id))
-                   onClick=(self.reduce(event => Toggle(getCommentIdFromEvent(event))))>
+                   onClick=(event => self.send(Toggle(getCommentIdFromEvent(event))))>
 
                 <img alt=(openComment ? "hide" : "show")
                      src=(
@@ -63,7 +63,7 @@ let make = (~story: StoryData.story_with_comments, _children) => {
                   ({
                     let time = fromNow(comment.time);
                     let by = comment.by;
-                    textEl({j| $time by $by|j})
+                    ReasonReact.string({j| $time by $by|j})
                   })
                 </span>
 
@@ -82,10 +82,10 @@ let make = (~story: StoryData.story_with_comments, _children) => {
             </div>
 
           | StoryData.CommentDeleted(_) =>
-            <div className="CommentList_error"> (textEl("[comment deleted (id="++string_of_int(id)++")]")) </div>
+            <div className="CommentList_error"> (ReasonReact.string("[comment deleted (id="++string_of_int(id)++")]")) </div>
           }
 
-        | None => <div className="CommentList_error"> (textEl("[comment not loaded (id="++string_of_int(id)++")]")) </div>
+        | None => <div className="CommentList_error"> (ReasonReact.string("[comment not loaded (id="++string_of_int(id)++")]")) </div>
         }
       )
     </div>
@@ -95,7 +95,7 @@ let make = (~story: StoryData.story_with_comments, _children) => {
     switch commentIds {
     | Some(ids) =>
       let commentList = Array.map(renderComment(self), ids);
-      <div> (arrayEl(commentList)) </div>
+      <div> (ReasonReact.array(commentList)) </div>
     | None => <div />
     };
 

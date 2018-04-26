@@ -30,10 +30,3 @@ let distanceFromBottom : unit => int = () => {
 };
 
 [@bs.module] external registerServiceWorker : unit => unit = "src/registerServiceWorker";
-
-let intEl = (n) =>
-  n |> string_of_int
-    |> ReasonReact.stringToElement;
-
-let textEl = ReasonReact.stringToElement;
-let arrayEl = ReasonReact.arrayToElement;
