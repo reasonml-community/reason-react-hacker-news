@@ -30,7 +30,7 @@ type comment =
   | CommentPresent(comment_present)
   | CommentDeleted(comment_deleted);
 
-type comments_map = JSMap.map(int, comment);
+type comments_map = Map.Int.t(comment);
 
 type story_with_comments = {
   by: string,
@@ -80,7 +80,7 @@ module Decode = {
   let commentsArray = json : comments_map =>
     Json.Decode.array(comment, json)
     |. Array.map(comment => (getCommentId(comment), comment))
-    |> JSMap.create;
+    |. Map.Int.fromArray;
   let storyWithComments = json : story_with_comments =>
     Json.Decode.{
       by: json |> field("by", string),

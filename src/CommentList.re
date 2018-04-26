@@ -35,7 +35,7 @@ let make = (~story: StoryData.story_with_comments, _children) => {
   let rec renderCommentKids = (self, comment: StoryData.comment_present) =>
     renderCommentList(self, comment.kids)
   and renderComment = ({ReasonReact.state} as self, id: int) => {
-    let commentMaybe = JSMap.get(story.comments, id);
+    let commentMaybe = Map.Int.get(story.comments, id);
     <div key=(string_of_int(id))>
       (
         switch (commentMaybe) {
