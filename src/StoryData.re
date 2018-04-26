@@ -1,5 +1,7 @@
 let apiBaseUrl = "https://serverless-api.hackernewsmobile.com";
+
 let topStoriesUrl = page => {j|$apiBaseUrl/topstories-25-$page.json|j};
+
 let storyUrl = id => {j|$apiBaseUrl/stories/$id.json|j};
 
 type story = {
@@ -9,7 +11,7 @@ type story = {
   score: int,
   time: int,
   title: string,
-  url: option(string)
+  url: option(string),
 };
 
 type comment_deleted = {id: int};
@@ -20,7 +22,7 @@ type comment_present = {
   kids: option(array(int)),
   parent: int,
   text: option(string),
-  time: int
+  time: int,
 };
 
 type comment =
@@ -39,29 +41,28 @@ type story_with_comments = {
   title: string,
   url: option(string),
   descendentIds: array(int),
-  comments: comments_map
+  comments: comments_map,
 };
 
 type topstories = array(story);
 
 module Decode = {
-  let idsArray = (json) : array(int) => Json.Decode.(json |> array(int));
-
-  let getCommentId = (comment) =>
-    switch comment {
+  let idsArray = json : array(int) => Json.Decode.(json |> array(int));
+  let getCommentId = comment =>
+    switch (comment) {
     | CommentDeleted(c) => c.id
     | CommentPresent(c) => c.id
     };
-
-  let comment = (json) : comment => {
-    let deletedMaybe = Json.Decode.(json |> optional(field("deleted", bool)));
+  let comment = json : comment => {
+    let deletedMaybe =
+      Json.Decode.(json |> optional(field("deleted", bool)));
     let deleted =
-      switch deletedMaybe {
+      switch (deletedMaybe) {
       | Some(v) => v == true
       | None => false
       };
     if (deleted) {
-      CommentDeleted(Json.Decode.{id: json |> field("id", int)})
+      CommentDeleted(Json.Decode.{id: json |> field("id", int)});
     } else {
       CommentPresent(
         Json.Decode.{
@@ -70,18 +71,17 @@ module Decode = {
           parent: json |> field("parent", int),
           kids: json |> optional(field("kids", idsArray)),
           text: json |> optional(field("text", string)),
-          time: json |> field("time", int)
-        }
-      )
-    }
+          time: json |> field("time", int),
+        },
+      );
+    };
   };
-
-  let commentsArray = (json) : comments_map =>
-    json |> Json.Decode.array(comment)
-         |> Array.map(comment => (getCommentId(comment), comment))
-         |> JSMap.create;
-
-  let storyWithComments = (json) : story_with_comments =>
+  let commentsArray = json : comments_map =>
+    json
+    |> Json.Decode.array(comment)
+    |> Array.map(comment => (getCommentId(comment), comment))
+    |> JSMap.create;
+  let storyWithComments = json : story_with_comments =>
     Json.Decode.{
       by: json |> field("by", string),
       descendants: json |> field("descendants", int),
@@ -92,10 +92,9 @@ module Decode = {
       score: json |> field("score", int),
       time: json |> field("time", int),
       title: json |> field("title", string),
-      url: json |> optional(field("url", string))
+      url: json |> optional(field("url", string)),
     };
-
-  let story = (json) : story =>
+  let story = json : story =>
     Json.Decode.{
       by: json |> field("by", string),
       descendants: json |> field("descendants", int),
@@ -103,37 +102,43 @@ module Decode = {
       score: json |> field("score", int),
       time: json |> field("time", int),
       title: json |> field("title", string),
-      url: json |> optional(field("url", string))
+      url: json |> optional(field("url", string)),
     };
-
-  let stories = (json) : array(story) =>
-    Json.Decode.(json |> array(story));
+  let stories = json : array(story) => Json.Decode.(json |> array(story));
 };
 
 let fetchTopStories = (page, callback) =>
-  Js.Promise.(
-    Fetch.fetch(topStoriesUrl(page))
-    |> then_(Fetch.Response.json)
-    |> then_(json =>
-        json  |> Decode.stories
-              |> stories => {
-                   callback((page, stories));
-                   resolve(())
-                 }
-       )
-    |> ignore /* TODO: error handling */
-  );
+  Js.Promise.
+    (
+      Fetch.fetch(topStoriesUrl(page))
+      |> then_(Fetch.Response.json)
+      |> then_(json =>
+           json
+           |> Decode.stories
+           |> (
+             stories => {
+               callback((page, stories));
+               resolve();
+             }
+           )
+         )
+      |> ignore
+    ); /* TODO: error handling */
 
 let fetchStoryWithComments = (id, callback) =>
-  Js.Promise.(
-    Fetch.fetch(storyUrl(id))
-    |> then_(Fetch.Response.json)
-    |> then_(json =>
-        json  |> Decode.storyWithComments
-              |> stories => {
-                   callback(stories);
-                   resolve(())
-                 }
-       )
-    |> ignore /* TODO: error handling */
-  );
+  Js.Promise.
+    (
+      Fetch.fetch(storyUrl(id))
+      |> then_(Fetch.Response.json)
+      |> then_(json =>
+           json
+           |> Decode.storyWithComments
+           |> (
+             stories => {
+               callback(stories);
+               resolve();
+             }
+           )
+         )
+      |> ignore
+    ); /* TODO: error handling */
