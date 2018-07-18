@@ -87,3 +87,9 @@
   font-size: 10px;
   text-align: center;
 }
+.StoryListItem_commentsCell a {
+  text-decoration: none;
+}
+a:hover .StoryListItem_commentsText {
+  color: #000;
+}
