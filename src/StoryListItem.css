@@ -4,7 +4,9 @@
 }
 
 .StoryListItem_flexRow {
+  display: flex;
   flex: 1;
+  padding: 8px;
 }
 
 .StoryListItem_icon {
@@ -18,22 +20,26 @@
   flex-wrap: nowrap;
   justify-content: space-around;
   align-items: stretch;
-  padding: 8px;
 }
 
 .StoryListItem_storyTitle {
+  display: flex;
+  flex: 0 0 auto;
+  margin-bottom: 4px;
   font-size: 18px;
-  margin-bottom: 2px;
-  overflow: hidden;
-}
-
-.StoryListItem_storyTitleText {
   font-weight: 700;
 }
 
-.StoryListItem_storyTime {
-  color: #999999;
-  font-size: 12px;
+.StoryListItem_storyIndex {
+  display: flex;
+  flex: 0 0 auto;
+  font-size: 18px;
+  line-height: 1.2;
+  margin-right: 12px;
+}
+.StoryListItem_storyIndex::after {
+  display: block;
+  content: '.';
 }
 
 .StoryListItem_row {
@@ -45,11 +51,17 @@
   align-items: stretch;
   border-bottom: solid 1px #eee;
   display: flex;
-  margin-bottom: 2px;
-  margin-top: 2px;
+  margin-top: 6px;
+  margin-bottom: 6px;
+  cursor: default;
 }
 
+.StoryListItem_byline,
+.StoryListItem_commentsText {
+  color: #999999;
+}
 .StoryListItem_byline {
+  font-size: 12px;
   padding: 0;
 }
 
@@ -62,7 +74,12 @@
   width: 80px;
 }
 
-.StoryListItem_number {
+.StoryListItem_row .StoryListItem_number {
+  margin-right: 4px;
+  padding-right: 6px;
+  border-right: 1px solid currentColor;
+}
+.StoryListItem_number b {
   font-weight: 700;
 }
 
