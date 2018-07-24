@@ -50,7 +50,7 @@ let make = (~id, _children) => {
     didMount: self =>
       StoryData.fetchStoryWithComments(id, data => self.send(Loaded(data))),
     render: ({state}) =>
-      <div>
+      <div className="CommentsPage_container">
         (
           switch (state.story_with_comments) {
           | Some(story) =>

@@ -1,6 +1,7 @@
 type route =
   | Home
-  | Comments(int);
+  | Comments(int)
+  | NotFound;
 
 type state = {route};
 
@@ -16,7 +17,7 @@ let mapUrlToRoute = (url: ReasonReact.Router.url) =>
   switch (url.path) {
   | [] => Home
   | ["comments", id] => Comments(int_of_string(id))
-  | _ => Home
+  | _ => NotFound
   };
 
 let component = ReasonReact.reducerComponent("App");
@@ -38,5 +39,6 @@ let make = _children => {
     switch (self.state.route) {
     | Home => <TopStoriesPage />
     | Comments(id) => <CommentsPage id />
+    | NotFound => <NotFound />
     },
 };

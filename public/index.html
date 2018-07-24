@@ -7,6 +7,12 @@
   <title>Reason React Hacker News</title>
   <link rel="shortcut icon" href="./favicon.png">
   <style>
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+  }
   body {
     font-family: 'Helvetica Neue', 'Open Sans', sans-serif;
     background-color: #f6f4f4;
@@ -28,22 +34,32 @@
     max-width: 800px;
     padding: 10px;
   }
-
   @media (max-width: 600px) {
     .App_header {
       display: block;
     }
   }
-
   .App_header a {
     display: block;
     flex: 0 0 auto;
-    color: #fff;
+    color: #fff !important;
     text-decoration: none;
   }
 
   .App_header h1 {
     font-size: 24px;
+  }
+
+  a {
+    color: #db4d3f;
+    text-decoration: none;
+  }
+  a:focus,
+  a:visited {
+    color: #ad2113;
+  }
+  a:hover {
+    text-decoration: underline;
   }
   </style>
 </head>

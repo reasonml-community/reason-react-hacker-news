@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@glennsl/bs-json@^1.1.3":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@glennsl/bs-json/-/bs-json-1.2.0.tgz#8a2175458cf425614d20bb5542a2eb92b09bd4fc"
+"@glennsl/bs-json@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@glennsl/bs-json/-/bs-json-2.0.0.tgz#e621aac1e94d49bc12bf493b67c01c39e61a6415"
 
 "@sindresorhus/is@^0.7.0":
   version "0.7.0"
@@ -1095,17 +1095,17 @@ browserslist@^1.3.6, browserslist@^1.5.2, browserslist@^1.7.6:
     caniuse-db "^1.0.30000639"
     electron-to-chromium "^1.2.7"
 
-bs-fetch@^0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/bs-fetch/-/bs-fetch-0.2.1.tgz#165bed867009f2e91efb959ca1c0ff940d8cd19a"
+bs-fetch@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/bs-fetch/-/bs-fetch-0.3.0.tgz#60c64457359d0c7e0798d5a04db8987d16c4f8f3"
 
 bs-platform@3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-3.0.0.tgz#38f200730db52fdea37819376b6ac3dfb20244c0"
 
-bs-webapi@^0.8.3:
-  version "0.8.3"
-  resolved "https://registry.yarnpkg.com/bs-webapi/-/bs-webapi-0.8.3.tgz#b0e331146ab44396550fba70fccb0bbd114afba0"
+bs-webapi@^0.10.0:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/bs-webapi/-/bs-webapi-0.10.0.tgz#2fd08783c1bf184817a7dd37f457ddd5449eb6fc"
 
 buffer-from@^1.0.0:
   version "1.0.0"
