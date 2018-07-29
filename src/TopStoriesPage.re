@@ -52,7 +52,7 @@ let make = _children => {
       loadNextPage(self);
     },
     render: self =>
-      <div>
+      <MainLayout>
         (
           if (Array.length(self.state.topstories) > 0) {
             self.state.topstories
@@ -66,6 +66,6 @@ let make = _children => {
             ReasonReact.null;
           }
         )
-      </div>,
+      </MainLayout>,
   };
 };

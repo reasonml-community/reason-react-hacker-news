@@ -29,6 +29,23 @@
   font-size: 18px;
   font-weight: 700;
 }
+.StoryListItem_storyTitle a {
+  position: relative;
+}
+.StoryListItem_storyTitle a::before {
+  left: 0;
+  bottom: 2px;
+  width: 0;
+  height: 1px;
+  display: block;
+  position: absolute;
+  content: '';
+  background: #e9938b;
+  transition: 180ms ease-in-out;
+}
+.StoryListItem_storyTitle a:hover::before {
+  width: 100%;
+}
 
 .StoryListItem_storyIndex {
   display: flex;

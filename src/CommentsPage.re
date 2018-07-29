@@ -50,18 +50,23 @@ let make = (~id, _children) => {
     didMount: self =>
       StoryData.fetchStoryWithComments(id, data => self.send(Loaded(data))),
     render: ({state}) =>
-      <div className="CommentsPage_container">
-        (
-          switch (state.story_with_comments) {
-          | Some(story) =>
-            <div>
-              (renderTitle(story))
-              (renderByline(story))
-              <CommentList story />
-            </div>
-          | None => ReasonReact.string("loading")
-          }
-        )
-      </div>,
+      <MainLayout>
+        <div className="CommentsPage_container">
+          (
+            switch (state.story_with_comments) {
+            | Some(story) =>
+              <div>
+                (renderTitle(story))
+                (renderByline(story))
+                <CommentList story />
+              </div>
+            | None =>
+              <div className="CommentsPage_loading">
+                (ReasonReact.string("loading"))
+              </div>
+            }
+          )
+        </div>
+      </MainLayout>,
   };
 };

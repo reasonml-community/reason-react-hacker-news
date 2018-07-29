@@ -2,6 +2,6 @@ open Utils;
 
 registerServiceWorker();
 
-ReactDOMRe.renderToElementWithId(<App />, "root");
+ReactDOMRe.renderToElementWithId(<App />, "App");
 
 ReasonReact.Router.push("");

@@ -1,0 +1,19 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  display: block;
+  min-height: 100%;
+}
+body {
+  font-family: 'Helvetica Neue', 'Open Sans', sans-serif;
+  background-color: #f6f4f4;
+}
+a {
+  transition: 140ms ease;
+  text-decoration: none;
+}
+pre code {
+  display: block;
+  overflow: auto;
+}

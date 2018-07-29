@@ -11,3 +11,11 @@
   color: #333;
   text-decoration: none;
 }
+
+.CommentsPage_loading {
+  display: flex;
+  padding-top: 4em;
+  padding-bottom: 4em;
+  text-transform: uppercase;
+  justify-content: center;
+}

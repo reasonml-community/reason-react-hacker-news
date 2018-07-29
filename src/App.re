@@ -1,3 +1,7 @@
+open Utils;
+
+requireCSS("src/App.css");
+
 type route =
   | Home
   | Comments(int)

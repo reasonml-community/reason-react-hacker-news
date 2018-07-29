@@ -1,0 +1,65 @@
+.MainLayout {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+@media (min-width: 800px) {
+  .MainLayout {
+    max-width: 800px;
+  }
+}
+
+.MainLayout_Header {
+  padding: 1.4em 1em;
+  font-weight: bold;
+
+  color: #fff;
+  background: #db4d3f;
+
+  cursor: default;
+}
+@media (min-width: 600px) {
+  .MainLayout_Header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.MainLayout_Header h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.MainLayout_Header_Menu {
+  display: flex;
+}
+.MainLayout_Header_Menu a {
+  display: block;
+  flex: 0 0 auto;
+  color: #fff;
+}
+.MainLayout_Header_Menu a:hover {
+  color: #832d25;
+}
+.MainLayout_Header_Menu a:not(:last-of-type) {
+  padding-right: 1em;
+}
+@media (max-width: 600px) {
+  .MainLayout_Header_Menu {
+    margin-top: 1em;
+  }
+}
+
+
+.MainLayout_Content a {
+  color: #000;
+}
+.MainLayout_Content a:focus,
+.MainLayout_Content a:visited {
+  color: #832d25;
+}
+.MainLayout_Content a:hover {
+  color: #db4d3f;
+}
