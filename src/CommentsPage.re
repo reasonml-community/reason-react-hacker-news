@@ -2,10 +2,16 @@ open Utils;
 
 requireCSS("src/CommentsPage.css");
 
-type state = {story_with_comments: option(StoryData.story_with_comments)};
+type state = {
+  loading: bool,
+  story_with_comments: option(StoryData.story_with_comments),
+  error: bool,
+};
 
 type action =
-  | Loaded(StoryData.story_with_comments);
+  | Loading
+  | Loaded(StoryData.story_with_comments)
+  | Error;
 
 let component = ReasonReact.reducerComponent("CommentsPage");
 
@@ -39,18 +45,61 @@ let make = (~id, _children) => {
         </span>
       </span>
     </div>;
+  let loadStory = send => {
+    StoryData.fetchStoryWithComments(id, result =>
+      switch (result) {
+      | Success(story) => send(Loaded(story))
+      | Error => send(Error)
+      }
+    )
+    |> ignore;
+    send(Loading);
+  };
   {
     ...component,
-    initialState: () => {story_with_comments: None},
-    reducer: (action, _state) =>
+    initialState: () => {
+      loading: false,
+      story_with_comments: None,
+      error: false,
+    },
+    reducer: (action, state) =>
       switch (action) {
-      | Loaded(data) =>
-        ReasonReact.Update({story_with_comments: Some(data)})
+      | Loading => ReasonReact.Update({...state, loading: true, error: false})
+      | Loaded(story) =>
+        ReasonReact.Update({
+          ...state,
+          loading: false,
+          story_with_comments: Some(story),
+        })
+      | Error => ReasonReact.Update({...state, loading: false, error: true})
       },
-    didMount: self =>
-      StoryData.fetchStoryWithComments(id, data => self.send(Loaded(data))),
-    render: ({state}) =>
+    didMount: self => loadStory(self.send),
+    render: ({state, send}) =>
       <div className="CommentsPage_container">
+        (
+          state.error ?
+            <div className="message">
+              (ReasonReact.string("Something went wrong... "))
+              <a
+                href="#"
+                onClick=(
+                  event => {
+                    event |> ReactEventRe.Mouse.preventDefault;
+                    loadStory(send);
+                  }
+                )>
+                (ReasonReact.string("Click to retry"))
+              </a>
+            </div> :
+            ReasonReact.null
+        )
+        (
+          state.loading ?
+            <div className="error">
+              (ReasonReact.string("Loading..."))
+            </div> :
+            ReasonReact.null
+        )
         (
           switch (state.story_with_comments) {
           | Some(story) =>
@@ -59,7 +108,7 @@ let make = (~id, _children) => {
               (renderByline(story))
               <CommentList story />
             </div>
-          | None => ReasonReact.string("loading")
+          | None => ReasonReact.null
           }
         )
       </div>,

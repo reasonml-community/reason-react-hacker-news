@@ -1,4 +1,5 @@
 open Belt;
+
 let apiBaseUrl = "https://serverless-api.hackernewsmobile.com";
 
 let topStoriesUrl = page => {j|$apiBaseUrl/topstories-25-$page.json|j};
@@ -107,38 +108,50 @@ module Decode = {
   let stories = json : array(story) => Json.Decode.(json |> array(story));
 };
 
+type top_stories_fetch_result =
+  | Success(int, topstories)
+  | Error;
+
 let fetchTopStories = (page, callback) =>
-  Js.Promise.
-    (
-      Fetch.fetch(topStoriesUrl(page))
-      |> then_(Fetch.Response.json)
-      |> then_(json =>
-           json
-           |> Decode.stories
-           |> (
-             stories => {
-               callback((page, stories));
-               resolve();
-             }
-           )
+  Js.Promise.(
+    Fetch.fetch(topStoriesUrl(page))
+    |> then_(Fetch.Response.json)
+    |> then_(json =>
+         json
+         |> Decode.stories
+         |> (
+           stories => {
+             callback(Success(page, stories));
+             resolve();
+           }
          )
-      |> ignore
-    ); /* TODO: error handling */
+       )
+    |> catch(_error => {
+         callback(Error);
+         resolve();
+       })
+  );
+
+type story_with_comments_fetch_result =
+  | Success(story_with_comments)
+  | Error;
 
 let fetchStoryWithComments = (id, callback) =>
-  Js.Promise.
-    (
-      Fetch.fetch(storyUrl(id))
-      |> then_(Fetch.Response.json)
-      |> then_(json =>
-           json
-           |> Decode.storyWithComments
-           |> (
-             stories => {
-               callback(stories);
-               resolve();
-             }
-           )
+  Js.Promise.(
+    Fetch.fetch(storyUrl(id))
+    |> then_(Fetch.Response.json)
+    |> then_(json =>
+         json
+         |> Decode.storyWithComments
+         |> (
+           story => {
+             callback(Success(story));
+             resolve();
+           }
          )
-      |> ignore
-    ); /* TODO: error handling */
+       )
+    |> catch(_error => {
+         callback(Error);
+         resolve();
+       })
+  );
