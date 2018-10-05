@@ -26,15 +26,13 @@ let make = _children => {
   ...component,
   reducer,
   initialState: () => {route: Home},
-  subscriptions: self => [
-    Sub(
-      () =>
-        ReasonReact.Router.watchUrl(url =>
-          self.send(ChangeRoute(url |> mapUrlToRoute))
-        ),
-      ReasonReact.Router.unwatchUrl,
-    ),
-  ],
+  didMount: self => {
+    let watchId =
+      ReasonReact.Router.watchUrl(url =>
+        self.send(ChangeRoute(url |> mapUrlToRoute))
+      );
+    self.onUnmount(() => ReasonReact.Router.unwatchUrl(watchId));
+  },
   render: self =>
     switch (self.state.route) {
     | Home => <TopStoriesPage />

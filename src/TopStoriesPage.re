@@ -39,7 +39,7 @@ let make = _children => {
         ReasonReact.SideEffects(
           (
             self =>
-              if (nearTheBottom() && ! self.state.loading) {
+              if (nearTheBottom() && !self.state.loading) {
                 loadNextPage(self);
               }
           ),
@@ -56,12 +56,18 @@ let make = _children => {
         (
           if (Array.length(self.state.topstories) > 0) {
             self.state.topstories
-            |. Array.mapWithIndex((index, story)
-                 /* key must be a unique string attached to the story, DO NOT use index */
-                 =>
-                   <StoryListItem key=(string_of_int(story.id)) index story />
-                 )
-            |. ReasonReact.array;
+            ->(
+                Array.mapWithIndex((index, story)
+                  /* key must be a unique string attached to the story, DO NOT use index */
+                  =>
+                    <StoryListItem
+                      key=(string_of_int(story.id))
+                      index
+                      story
+                    />
+                  )
+              )
+            ->ReasonReact.array;
           } else {
             ReasonReact.null;
           }

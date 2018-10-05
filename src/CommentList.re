@@ -1,4 +1,5 @@
 open Belt;
+
 open Utils;
 
 requireCSS("src/CommentList.css");
@@ -23,10 +24,7 @@ let make = (~story: StoryData.story_with_comments, _children) => {
     | None => collapsed
     };
   let getCommentIdFromEvent = (event: ReactEventRe.Mouse.t) =>
-    getAttribute(
-      ReactDOMRe.domElementToObj(ReactEventRe.Mouse.currentTarget(event)),
-      "name",
-    );
+    getAttribute(ReactEvent.Mouse.currentTarget(event), "name");
   let renderCommentText = (textMaybe: option(string)) =>
     switch (textMaybe) {
     | Some(text) => <div dangerouslySetInnerHTML=(dangerousHtml(text)) />
@@ -43,7 +41,7 @@ let make = (~story: StoryData.story_with_comments, _children) => {
           switch (commentPresentOrDeleted) {
           | StoryData.CommentPresent(comment) =>
             let openComment =
-              ! Set.Int.has(state.collapsed_comments, comment.id);
+              !Set.Int.has(state.collapsed_comments, comment.id);
             <div className="CommentList_comment">
               <div
                 className="CommentList_disclosureRow CommentList_inline"
@@ -109,9 +107,7 @@ let make = (~story: StoryData.story_with_comments, _children) => {
     };
   {
     ...component,
-    initialState: () => {
-      collapsed_comments: Set.Int.empty,
-    },
+    initialState: () => {collapsed_comments: Set.Int.empty},
     reducer: (action, state) =>
       switch (action) {
       | Toggle(commentId) =>
