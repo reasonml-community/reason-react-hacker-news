@@ -1231,10 +1231,10 @@ bs-platform@4.0.6:
   resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-4.0.6.tgz#e7f156c77ad3efafb0c0291b41dcf1b06f93c192"
   integrity sha512-TrNzQFoV6opBYdUgcRdgQQ5f6JnKgotPFZORIjuHPtRlYgv37P6xVBTGfA4NlMCkHXHcPrL6JI63GyAcfq+qpg==
 
-bs-webapi@^0.12.2:
-  version "0.12.2"
-  resolved "https://registry.yarnpkg.com/bs-webapi/-/bs-webapi-0.12.2.tgz#5d85130dafbee44fd1232a851c34f06b5ecdf3f9"
-  integrity sha512-DpdxZey/0GdbYK2d5dXP9SF9g7gdVwspnqQNonjxQ+HwlJOVcA4pkCyWE8Trxg7O2J2KekKAZLAgn3kjGB71pQ==
+bs-webapi@^0.13.0:
+  version "0.13.0"
+  resolved "https://registry.yarnpkg.com/bs-webapi/-/bs-webapi-0.13.0.tgz#c52f3043fcc656d7936b12c214851c64b58aede9"
+  integrity sha512-GmykwZA0A7Yce5ystKMZdyMDPs1+zgIUb7iPPc4zQSasDujhYErMW+0xEFLTatl76JTs/jbXRBcbPJlgIbnq0A==
 
 buffer-from@^1.0.0:
   version "1.0.0"
