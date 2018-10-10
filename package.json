@@ -20,17 +20,17 @@
   "author": "James Friend",
   "license": "MIT",
   "dependencies": {
-    "@glennsl/bs-json": "^2.0.0",
+    "@glennsl/bs-json": "^3.0.0",
     "bs-fetch": "^0.3.0",
-    "bs-webapi": "^0.10.0",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
-    "reason-react": "0.4.0"
+    "bs-webapi": "^0.12.2",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
+    "reason-react": "0.5.3"
   },
   "devDependencies": {
-    "bs-platform": "3.0.0",
+    "bs-platform": "4.0.6",
     "compression-webpack-plugin": "^1.1.11",
-    "css-loader": "^0.28.10",
+    "css-loader": "^1.0.0",
     "electrode-bundle-analyzer": "^1.0.1",
     "express": "^4.16.3",
     "express-static-gzip": "^0.3.2",

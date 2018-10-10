@@ -1,8 +1,8 @@
 let component = ReasonReact.statelessComponent("Link");
 
 let handleClick = (href, event) =>
-  if (! ReactEventRe.Mouse.defaultPrevented(event)) {
-    ReactEventRe.Mouse.preventDefault(event);
+  if (!ReactEvent.Mouse.defaultPrevented(event)) {
+    ReactEvent.Mouse.preventDefault(event);
     ReasonReact.Router.push(href);
   };
 

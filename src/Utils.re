@@ -1,10 +1,10 @@
 /* require css file for side effect only */
-[@bs.val] external requireCSS : string => unit = "require";
+[@bs.val] external requireCSS: string => unit = "require";
 
 /* require an asset (eg. an image) and return exported string value (image URI) */
-[@bs.val] external requireAssetURI : string => string = "require";
+[@bs.val] external requireAssetURI: string => string = "require";
 
-[@bs.val] external currentTime : unit => int = "Date.now";
+[@bs.val] external currentTime: unit => int = "Date.now";
 
 /* format a timestamp in seconds as relative humanised time sentence */
 let fromNow = unixtime => {
@@ -19,8 +19,7 @@ let fromNow = unixtime => {
 };
 
 [@bs.send] [@bs.return nullable]
-external getAttribute : (Js.t('a), string) => option(string) =
-  "getAttribute";
+external getAttribute: (Js.t('a), string) => option(string) = "getAttribute";
 
 let dangerousHtml: string => Js.t('a) = html => {"__html": html};
 
@@ -33,4 +32,4 @@ let distanceFromBottom: unit => int =
   };
 
 [@bs.module]
-external registerServiceWorker : unit => unit = "src/registerServiceWorker";
+external registerServiceWorker: unit => unit = "src/registerServiceWorker";
