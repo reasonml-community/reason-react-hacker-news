@@ -23,19 +23,19 @@ let make = (~story: StoryData.story_with_comments, _children) => {
       };
     | None => collapsed
     };
-  let getCommentIdFromEvent = (event: ReactEventRe.Mouse.t) =>
+  let getCommentIdFromEvent = (event: ReactEvent.Mouse.t) =>
     getAttribute(ReactEvent.Mouse.currentTarget(event), "name");
   let renderCommentText = (textMaybe: option(string)) =>
     switch (textMaybe) {
-    | Some(text) => <div dangerouslySetInnerHTML=(dangerousHtml(text)) />
+    | Some(text) => <div dangerouslySetInnerHTML={dangerousHtml(text)} />
     | None => ReasonReact.string("missing comment")
     };
   let rec renderCommentKids = (self, comment: StoryData.comment_present) =>
     renderCommentList(self, comment.kids)
   and renderComment = ({ReasonReact.state} as self, id: int) => {
     let commentMaybe = Map.Int.get(story.comments, id);
-    <div key=(string_of_int(id))>
-      (
+    <div key={string_of_int(id)}>
+      {
         switch (commentMaybe) {
         | Some(commentPresentOrDeleted) =>
           switch (commentPresentOrDeleted) {
@@ -45,17 +45,17 @@ let make = (~story: StoryData.story_with_comments, _children) => {
             <div className="CommentList_comment">
               <div
                 className="CommentList_disclosureRow CommentList_inline"
-                name=(string_of_int(comment.id))
+                name={string_of_int(comment.id)}
                 onClick=(
                   event => self.send(Toggle(getCommentIdFromEvent(event)))
                 )>
                 <img
-                  alt=(openComment ? "hide" : "show")
-                  src=(
+                  alt={openComment ? "hide" : "show"}
+                  src={
                     openComment ?
                       requireAssetURI("src/disclosure90.png") :
                       requireAssetURI("src/disclosure.png")
-                  )
+                  }
                   className="CommentList_disclosure CommentList_muted"
                 />
                 <span className="CommentList_muted">
@@ -66,43 +66,43 @@ let make = (~story: StoryData.story_with_comments, _children) => {
                   }
                 </span>
               </div>
-              (
+              {
                 if (openComment) {
                   <div className="CommentList_commentBody">
-                    (renderCommentText(comment.text))
-                    (renderCommentKids(self, comment))
+                    {renderCommentText(comment.text)}
+                    {renderCommentKids(self, comment)}
                   </div>;
                 } else {
                   <noscript />;
                 }
-              )
+              }
             </div>;
           | StoryData.CommentDeleted(_) =>
             <div className="CommentList_error">
-              (
+              {
                 ReasonReact.string(
                   "[comment deleted (id=" ++ string_of_int(id) ++ ")]",
                 )
-              )
+              }
             </div>
           }
         | None =>
           <div className="CommentList_error">
-            (
+            {
               ReasonReact.string(
                 "[comment not loaded (id=" ++ string_of_int(id) ++ ")]",
               )
-            )
+            }
           </div>
         }
-      )
+      }
     </div>;
   }
   and renderCommentList = (self, commentIds: option(array(int))) =>
     switch (commentIds) {
     | Some(ids) =>
       let commentList = Array.map(ids, renderComment(self));
-      <div> (ReasonReact.array(commentList)) </div>;
+      <div> {ReasonReact.array(commentList)} </div>;
     | None => <div />
     };
   {
