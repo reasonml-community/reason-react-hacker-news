@@ -8,10 +8,10 @@ let commentIcon = requireAssetURI("src/comment.png");
 let make = (~story: StoryData.story, ~index: int, ()) => {
   let renderIndex = () =>
     <aside className="StoryListItem_storyIndex">
-      {ReasonReact.string(string_of_int(index + 1))}
+      {React.string(string_of_int(index + 1))}
     </aside>;
   let renderTitle = () => {
-    let content = ReasonReact.string(story.title);
+    let content = React.string(story.title);
     <header className="StoryListItem_storyTitle">
       {switch (story.url) {
        | Some(url) =>
@@ -32,13 +32,13 @@ let make = (~story: StoryData.story, ~index: int, ()) => {
       /* TODO: badge */
 
         <span className="StoryListItem_number">
-          <b> {ReasonReact.string(string_of_int(story.score))} </b>
-          {ReasonReact.string(" points")}
+          <b> {React.string(string_of_int(story.score))} </b>
+          {React.string(" points")}
         </span>
         <span className="StoryListItem_storyTime">
           {let time = story.time
            let by = story.by
-           ReasonReact.string({j| submitted $time by $by|j})}
+           React.string({j| submitted $time by $by|j})}
         </span>
       </div>;
   let renderArticleButton = () =>
@@ -60,9 +60,9 @@ let make = (~story: StoryData.story, ~index: int, ()) => {
         <div>
           <span className="StoryListItem_commentsText">
             <span className="StoryListItem_number">
-              {ReasonReact.string(string_of_int(story.descendants))}
+              {React.string(string_of_int(story.descendants))}
             </span>
-            {ReasonReact.string(" comments")}
+            {React.string(" comments")}
           </span>
         </div>
       </Link>

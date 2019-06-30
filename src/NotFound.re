@@ -12,10 +12,10 @@ let make = () =>
     </div>
     <div className="NotFound_text">
       <span>
-        {ReasonReact.string(
+        {React.string(
            "The page you're looking for can't be found. Go home by ",
          )}
       </span>
-      <Link href="/"> {ReasonReact.string("clicking here!")} </Link>
+      <Link href="/"> {React.string("clicking here!")} </Link>
     </div>
   </div>;

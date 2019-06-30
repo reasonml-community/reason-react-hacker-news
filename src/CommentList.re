@@ -39,7 +39,7 @@ let make = (~story: StoryData.story_with_comments) => {
   let renderCommentText = (textMaybe: option(string)) =>
     switch (textMaybe) {
     | Some(text) => <div dangerouslySetInnerHTML={dangerousHtml(text)} />
-    | None => ReasonReact.string("missing comment")
+    | None => React.string("missing comment")
     };
   let rec renderCommentKids = (comment: StoryData.comment_present) =>
     renderCommentList(comment.kids)
@@ -72,7 +72,7 @@ let make = (~story: StoryData.story_with_comments) => {
                  {
                    let time = fromNow(comment.time);
                    let by = comment.by;
-                   ReasonReact.string({j| $time by $by|j});
+                   React.string({j| $time by $by|j});
                  }
                </span>
              </div>
@@ -87,14 +87,14 @@ let make = (~story: StoryData.story_with_comments) => {
            </div>;
          | StoryData.CommentDeleted(_) =>
            <div className="CommentList_error">
-             {ReasonReact.string(
+             {React.string(
                 "[comment deleted (id=" ++ string_of_int(id) ++ ")]",
               )}
            </div>
          }
        | None =>
          <div className="CommentList_error">
-           {ReasonReact.string(
+           {React.string(
               "[comment not loaded (id=" ++ string_of_int(id) ++ ")]",
             )}
          </div>
@@ -105,7 +105,7 @@ let make = (~story: StoryData.story_with_comments) => {
     switch (commentIds) {
     | Some(ids) =>
       let commentList = Array.map(ids, id => renderComment(id));
-      <div> {ReasonReact.array(commentList)} </div>;
+      <div> {React.array(commentList)} </div>;
     | None => <div />
     };
   renderCommentList(story.kids);

@@ -17,7 +17,7 @@ let make = (~id) => {
   let renderTitle = (story: StoryData.story_with_comments) => {
     let title =
       <h2 className="CommentsPage_title">
-        {ReasonReact.string(story.title)}
+        {React.string(story.title)}
       </h2>;
     <div>
       {switch (story.url) {
@@ -29,13 +29,13 @@ let make = (~id) => {
   };
   let renderByline = (story: StoryData.story_with_comments) =>
     <div>
-      <span> {ReasonReact.string(string_of_int(story.score))} </span>
-      {ReasonReact.string(" points")}
+      <span> {React.string(string_of_int(story.score))} </span>
+      {React.string(" points")}
       <span>
         <span>
           {let time = story.time
            let by = story.by
-           ReasonReact.string({j| submitted $time by $by|j})}
+           React.string({j| submitted $time by $by|j})}
         </span>
       </span>
     </div>;
@@ -53,7 +53,7 @@ let make = (~id) => {
              {renderByline(story)}
              <CommentList story />
            </div>
-         | None => ReasonReact.string("loading")
+         | None => React.string("loading")
          }}
       </div>;
 };

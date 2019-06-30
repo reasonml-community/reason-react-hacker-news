@@ -26,29 +26,29 @@ let make = () => {
         },
       initialState,
     );
-    // Using useEffect0 to run this effect one time and prevent multiple reloads of same data which crashes browser
-    React.useEffect0(() => {
-      StoryData.fetchTopStories(state.page, payload =>
-        dispatch(Loaded(payload))
-      )
-      |> ignore;
-      None;
-    });
+  // Using useEffect0 to run this effect one time and prevent multiple reloads of same data which crashes browser
+  React.useEffect0(() => {
+    StoryData.fetchTopStories(state.page, payload =>
+      dispatch(Loaded(payload))
+    )
+    |> ignore;
+    None;
+  });
 
-    React.useEffect(() => {
-      let nearTheBottom = () => distanceFromBottom() < 100;
-      let loadNextPage = () =>
-        if (state.page < 4) {
-          StoryData.fetchTopStories(state.page, payload =>
-            dispatch(Loaded(payload))
-          )
-          |> ignore;
-          dispatch(Loading);
-        };
-      let scrollHander = _e =>
+  React.useEffect(() => {
+    let nearTheBottom = () => distanceFromBottom() < 100;
+    let loadNextPage = () =>
+      if (state.page < 4) {
+        StoryData.fetchTopStories(state.page, payload =>
+          dispatch(Loaded(payload))
+        )
+        |> ignore;
+        dispatch(Loading);
+      };
+    let scrollHander = _e =>
       if (nearTheBottom() && !state.loading) {
-                loadNextPage();
-              };
+        loadNextPage();
+      };
     Webapi.Dom.window
     |> Webapi.Dom.Window.addEventListener("scroll", scrollHander);
 
@@ -65,9 +65,15 @@ let make = () => {
        ->(
            Array.mapWithIndex((index, story)
              /* key must be a unique string attached to the story, DO NOT use index. Using just the story.id get error in browser for duplicate keys*/
-             => <StoryListItem key={string_of_int(story.id + index)} index story />)
+             =>
+               <StoryListItem
+                 key={string_of_int(story.id + index)}
+                 index
+                 story
+               />
+             )
          )
-       ->ReasonReact.array;
+       ->React.array;
      } else {
        ReasonReact.null;
      }}
