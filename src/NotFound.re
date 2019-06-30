@@ -4,8 +4,6 @@ requireCSS("src/NotFound.css");
 
 let notFoundImage = requireAssetURI("src/notfound404.png");
 
-// let component = ReasonReact.statelessComponent("NotFound");
-
 [@react.component]
 let make = () =>
   <div className="NotFound_container">
