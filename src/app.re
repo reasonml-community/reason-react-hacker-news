@@ -1,7 +1,7 @@
 
 [@react.component]
 let make = () => {
-  let url = ReasonReactRouter.useUrl();
+  let url = ReasonReact.Router.useUrl();
 
   switch (url.path) {
   | [] => <TopStoriesPage />

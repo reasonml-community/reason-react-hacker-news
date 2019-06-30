@@ -4,4 +4,4 @@ registerServiceWorker();
 
 ReactDOMRe.renderToElementWithId(<App />, "root");
 
-ReasonReactRouter.push("");
+ReasonReact.Router.push("");
