@@ -20,15 +20,15 @@
   "author": "James Friend and Alain Armand <aarmand.inbox@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@glennsl/bs-json": "^4.0.0",
-    "bs-fetch": "^0.5.0",
-    "bs-webapi": "^0.15.2",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
+    "@glennsl/bs-json": "^5.0.2",
+    "bs-fetch": "^0.5.1",
+    "bs-webapi": "^0.15.6",
+    "react": "16.8.6",
+    "react-dom": "16.8.6",
     "reason-react": "0.7.0"
   },
   "devDependencies": {
-    "bs-platform": "5.0.4",
+    "bs-platform": "7.1.0",
     "compression-webpack-plugin": "^3.0.0",
     "css-loader": "^3.0.0",
     "electrode-bundle-analyzer": "^1.0.1",
