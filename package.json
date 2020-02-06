@@ -23,8 +23,8 @@
     "@glennsl/bs-json": "^5.0.2",
     "bs-fetch": "^0.5.1",
     "bs-webapi": "^0.15.6",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
+    "react": "16.8.6",
+    "react-dom": "16.8.6",
     "reason-react": "0.7.0"
   },
   "devDependencies": {
