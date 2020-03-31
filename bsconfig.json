@@ -5,13 +5,14 @@
   "reason": {
     "react-jsx": 3
   },
+  "pp-flags": "./node_modules/.bin/napkinscript",
+  "bsc-flags": ["-bs-super-errors", "-bs-no-version-header"],
   "bs-dependencies": [
     "reason-react",
     "bs-fetch",
     "@glennsl/bs-json",
     "bs-webapi"
   ],
-  "refmt": 3,
   "sources": [
     {
       "dir": "src"

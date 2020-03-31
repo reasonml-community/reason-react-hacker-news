@@ -36,6 +36,7 @@
     "express-static-gzip": "^1.1.3",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^4.0.0",
+    "napkinscript": "https://github.com/IwanKaramazow/napkinscript.git",
     "rollup-loader": "^0.3.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "style-loader": "^0.23.1",
